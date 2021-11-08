@@ -221,7 +221,7 @@ int ArrayList<T>::next(int index) // --- Retriving location of element after giv
 template <class T>
 int ArrayList<T>::previous(int index) // --- Retriving location of element before given index ---
 {
-    if (index < 0 || index > item_size)
+    if (index <= 0 || index > item_size)
     {
         return -1;
     }
