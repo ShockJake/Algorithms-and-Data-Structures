@@ -50,7 +50,7 @@ template <class T>
 ArrayList<T>::ArrayList() // --- Basic constructor ---
 {
     this->item_size = 0;
-    this->items = nullptr;
+    this->items = new T[0];
     this->capacity = 0;
     this->reserved_size = 0;
 }
