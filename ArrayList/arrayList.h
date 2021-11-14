@@ -1,6 +1,5 @@
 #ifndef ARRAYLIST_H
 #define ARRAYLIST_H
-
 #include "list.h"
 
 template <class T>
