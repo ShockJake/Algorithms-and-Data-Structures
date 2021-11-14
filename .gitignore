@@ -1,0 +1,9 @@
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+.vscode/tasks.json
+main.exe
+1.txt
+.vscode/settings.json
+LinkedList/main.exe
+LinkedList/main.obj
+LinkedList/vc140.pdb
