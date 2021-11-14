@@ -3,3 +3,8 @@
 .vscode/tasks.json
 main
 arrayList.cpp
+1.txt
+.vscode/settings.json
+LinkedList/main.exe
+LinkedList/main.obj
+LinkedList/vc140.pdb
