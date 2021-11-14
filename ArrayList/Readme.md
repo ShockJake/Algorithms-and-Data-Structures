@@ -1,6 +1,5 @@
 # Implemetetation of List using Array List
 
-
 * ### Compiling program:
 
 ```bash
