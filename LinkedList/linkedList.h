@@ -10,15 +10,15 @@ private:
     class Node
     {
     public:
-        Node *pNext;
+        Node* pNext;
         T data;
-        Node(T data = T(), Node *pNext = nullptr)
+        Node(T data = T(), Node* pNext = nullptr)
         {
             this->data = data;
             this->pNext = pNext;
         }
     };
-    Node<T> *head;
+    Node<T>* head;
     int size;
 
 public:
@@ -27,15 +27,15 @@ public:
 
     bool isEmpty() override;
     int getLength() override;
-    bool insert(int index, const T &a) override;
+    bool insert(int index, const T& a) override;
     bool remove(int index) override;
     T retrive(int index) override;
     string toString() override;
 
-    int locate(const T &element);
-    T &operator[](const int index);
-    Node<T> *first();
-    Node<T> *last();
+    int locate(const T& element);
+    T& operator[](const int index);
+    Node<T>* first();
+    Node<T>* last();
     T front();
     T back();
     bool push_back(T data);
@@ -43,6 +43,11 @@ public:
     bool pop_front();
     bool pop_back();
     void clear();
+
+    void removeDuplicates();
+    void makeUnique();
+    void reverse();
+    void removeSecondElements();
 };
 
 template <class T>
@@ -65,7 +70,7 @@ int LinkedList<T>::getLength()
 }
 
 template <class T>
-bool LinkedList<T>::insert(int index, const T &a)
+bool LinkedList<T>::insert(int index, const T& a)
 {
     if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
     {
@@ -80,7 +85,7 @@ bool LinkedList<T>::insert(int index, const T &a)
     }
     else
     {
-        Node<T> *previous = this->head;     // Creating pointer to the element that goes before the element of the given index.
+        Node<T>* previous = this->head;     // Creating pointer to the element that goes before the element of the given index.
         for (int i = 0; i < index - 1; i++) // Finding element that goes before the element of the given index.
         {
             previous = previous->pNext;
@@ -92,15 +97,15 @@ bool LinkedList<T>::insert(int index, const T &a)
 }
 
 template <class T>
-T LinkedList<T>::retrive(int index)
+T LinkedList<T>::retrive(int index) // --- Returning element in th given index ---
 {
     if (index < 0 || index > size) // Cheking if index fits the limits of the list
     {
         return -1;
     }
 
-    Node<T> *current = head;
-    for (int i = 0; i < index; i++)
+    Node<T>* current = head;        // Creating pointer to the head.
+    for (int i = 0; i < index; i++) // Iterating througth the list.
     {
         current = current->pNext;
     }
@@ -122,13 +127,13 @@ bool LinkedList<T>::remove(int index) // --- Removing element from the list on t
     }
     else
     {
-        Node<T> *previous = this->head;     // Creating pointer to the element that goes before the element of the given index.
+        Node<T>* previous = this->head;     // Creating pointer to the element that goes before the element of the given index.
         for (int i = 0; i < index - 1; i++) // Finding element that goes before the element of the given index.
         {
             previous = previous->pNext;
         }
 
-        Node<T> *toDelete = previous->pNext; // Creating pointer to the element the would be deleted.
+        Node<T>* toDelete = previous->pNext; // Creating pointer to the element the would be deleted.
 
         previous->pNext = toDelete->pNext; // Connecting "next" pointer of previous element to the "next" pointer of the next element.
 
@@ -139,7 +144,7 @@ bool LinkedList<T>::remove(int index) // --- Removing element from the list on t
 }
 
 template <class T>
-bool LinkedList<T>::isEmpty()
+bool LinkedList<T>::isEmpty() // --- Checking if the list is empty ---
 {
     return size == 0;
 }
@@ -148,7 +153,7 @@ template <class T>
 string LinkedList<T>::toString() // --- Converting list to a string ---
 {
     string LinkedListStr = "";     // Creating container for elements.
-    Node<T> *current = this->head; // Creating pointer to iterate the list.
+    Node<T>* current = this->head; // Creating pointer to iterate the list.
 
     while (current->pNext != nullptr) // Moving througth the list and fiiling the container.
     {
@@ -171,7 +176,7 @@ bool LinkedList<T>::push_back(T data) // --- Adding new element in the end of th
     }
     else
     {
-        Node<T> *current = this->head; // Creating pointer to move to the end of the list.
+        Node<T>* current = this->head; // Creating pointer to move to the end of the list.
 
         while (current->pNext != nullptr) // Moving througth the list
         {
@@ -185,7 +190,7 @@ bool LinkedList<T>::push_back(T data) // --- Adding new element in the end of th
 }
 
 template <class T>
-T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" operator to get easier access to the elements ---
+T& LinkedList<T>::operator[](const int index) // --- Overloading "brackets" operator to get easier access to the elements ---
 {
 
     if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
@@ -194,7 +199,7 @@ T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" oper
     }
 
     int counter = 0; // Seting up a counter.
-    Node<T> *current = this->head;
+    Node<T>* current = this->head;
     while (current != nullptr)
     {
         if (counter == index) // Cheking if counter equals to index and returning data of this element.
@@ -222,7 +227,7 @@ bool LinkedList<T>::pop_front() // --- Remove element in the begining of the lis
     }
     else
     {
-        Node<T> *temp = head; // Creating temporary pointer to the fisrt element of list.
+        Node<T>* temp = head; // Creating temporary pointer to the fisrt element of list.
         head = head->pNext;   // Moving head to next element.
         delete temp;          // Deleting "old" first element.
         size--;               // Decreasing size.
@@ -246,7 +251,7 @@ void LinkedList<T>::clear() // --- Delete all data and free memory ---
 }
 
 template <class T>
-int LinkedList<T>::locate(const T &element) // --- Locate element in the list ---
+int LinkedList<T>::locate(const T& element) // --- Locate element in the list ---
 {
     if (isEmpty()) // Checking if the list is empty.
     {
@@ -254,7 +259,7 @@ int LinkedList<T>::locate(const T &element) // --- Locate element in the list --
     }
     else
     {
-        Node<T> *current = head;       // Creating pointer to head.
+        Node<T>* current = head;       // Creating pointer to head.
         for (int i = 0; i < size; i++) // Moving througth the list.
         {
             if (element == current->data) // Checking if the given element is equal to the element in list.
@@ -268,7 +273,7 @@ int LinkedList<T>::locate(const T &element) // --- Locate element in the list --
 }
 
 template <class T>
-LinkedList<T>::Node<T> *LinkedList<T>::first() // --- Returns pointer to the begining of the list.
+LinkedList<T>::Node<T>* LinkedList<T>::first() // --- Returns pointer to the begining of the list.
 {
     if (!isEmpty()) // Checking if the list isn't empty.
     {
@@ -279,7 +284,7 @@ LinkedList<T>::Node<T> *LinkedList<T>::first() // --- Returns pointer to the beg
 }
 
 template <class T>
-LinkedList<T>::Node<T> *LinkedList<T>::last() // --- Returning pointer to the end of the list ---
+LinkedList<T>::Node<T>* LinkedList<T>::last() // --- Returning pointer to the end of the list ---
 {
     if (!isEmpty()) // Checking if the list isn't empty.
     {
@@ -294,7 +299,7 @@ LinkedList<T>::Node<T> *LinkedList<T>::last() // --- Returning pointer to the en
         }
         else
         {
-            Node<T> *current = head;           // Creating a pointer to head.
+            Node<T>* current = head;           // Creating a pointer to head.
             for (int i = 0; i < size - 2; i++) // Moving through the list.
             {
                 current = current->pNext;
@@ -323,7 +328,7 @@ T LinkedList<T>::back() // --- Returning the last element ---
 {
     if (!isEmpty()) // Checking if the list isn't empty.
     {
-        Node<T> *current = head;           // Creating pointer to the head.
+        Node<T>* current = head;           // Creating pointer to the head.
         for (int i = 0; i < size - 1; i++) // Moving througth the list.
         {
             current = current->pNext;
@@ -333,6 +338,101 @@ T LinkedList<T>::back() // --- Returning the last element ---
     else
     {
         return -1;
+    }
+}
+
+template <class T>
+void LinkedList<T>::removeDuplicates() //TODO
+{
+    if (!isEmpty())
+    {
+        Node<T>* ptr1 = head;
+        Node<T>* ptr2 = nullptr;
+        Node<T>* dup = nullptr;
+        while (ptr1 != nullptr && ptr1->pNext != nullptr)
+        {
+            ptr2 = ptr1;
+            while (ptr2->pNext != nullptr)
+            {
+                if (ptr1->data == ptr2->pNext->data)
+                {
+                    dup = ptr2->pNext;
+                    ptr2->pNext = ptr2->pNext->pNext;
+                    size--;
+                    delete(dup);
+                }
+                else
+                {
+                    ptr2 = ptr2->pNext;
+                } 
+            }
+            ptr1 = ptr1->pNext;
+        }
+    }
+}
+
+template <class T>
+void LinkedList<T>::makeUnique() // --- Remove all not-unique elements ---
+{
+    if (!isEmpty())
+    {
+        Node<T>* ptr1 = head;       //
+        Node<T>* ptr2 =  nullptr;   // Creating hepling pointers.
+        Node<T>* dup = nullptr;     //
+        while (ptr1 != nullptr && ptr1->pNext != nullptr)
+        {
+            ptr2 = ptr1;
+
+            while (ptr2->pNext != nullptr)
+            {
+                if (ptr1->data == ptr2->pNext->data)    // Checking if element is equal to enother element.
+                {
+                    dup = ptr2->pNext;                  //
+                    ptr2->pNext = ptr2->pNext->pNext;   // Deleting element.
+                    size--;                             //
+                    delete(dup);                        //
+                }
+                else
+                {
+                    ptr2 = ptr2->pNext; // Moving througth the list.
+                }
+            }
+            ptr1 = ptr1->pNext; // Moving througth the list.
+        }
+    }
+}
+
+template <class T>
+void LinkedList<T>::reverse()
+{
+    if (!isEmpty()) // Checking if the list isn't empty.
+    {
+        Node<T>* temp = nullptr; //
+        Node<T>* prev = nullptr; // Creating helping pointers.
+        Node<T>* current = head; //
+
+        while (current != nullptr) // Reversing list.
+        {
+            temp = current->pNext;
+            current->pNext = prev;
+            prev = current;
+            current = temp;
+        }
+        head = prev;
+    }
+}
+
+template <class T>
+void LinkedList<T>::removeSecondElements()
+{
+    if (!isEmpty()) // Checking if the list isn't empty.
+    {
+        Node<T>* current = head;       // Creating pointer to the "head" of the list.
+        for (int i = 0; i < size; i++) // Iterating througth the list and removing every 3-rd element.
+        {
+            remove(i + 2);
+        }
+        pop_front(); // Removing first element.
     }
 }
 
