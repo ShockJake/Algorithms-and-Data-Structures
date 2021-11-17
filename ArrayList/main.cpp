@@ -64,8 +64,8 @@ int main()
     cout << "located elements that was inserted before." << endl;
     
     cout << "\n---retrive()---" << endl;
-    cout << "|Array List 1| " << arr1.retrive(1) << endl;
-    cout << "|Array List 2| " << arr2.retrive(1) << endl;
+    cout << "|Array List 1| " << arr1.retrieve(1) << endl;
+    cout << "|Array List 2| " << arr2.retrieve(1) << endl;
     cout << "retrived elements from the second position." << endl;
 
     cout << "\n---remove()---" << endl;

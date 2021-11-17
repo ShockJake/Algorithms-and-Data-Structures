@@ -20,7 +20,7 @@ public:
     int getLength() override;
     bool insert(int index, const T &a) override;
     bool remove(int index) override;
-    T retrive(int index) override;
+    T retrieve(int index) override;
     string toString() override;
 
     int locate(const T &a) override;
@@ -154,7 +154,7 @@ bool ArrayList<T>::remove(int index) // --- Element removing ---
 }
 
 template <class T>
-T ArrayList<T>::retrive(int index) // --- Retriving element form array ---
+T ArrayList<T>::retrieve(int index) // --- Retriving element form array ---
 {
     if (index >= item_size || index < 0) //Checking if index fits array limit.
     {
@@ -162,6 +162,8 @@ T ArrayList<T>::retrive(int index) // --- Retriving element form array ---
     }
     return items[index];
 }
+
+
 
 template <class T>
 string ArrayList<T>::toString() // --- Converting array to string ---

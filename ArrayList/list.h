@@ -13,7 +13,7 @@ public:
     virtual int getLength() = 0;
     virtual bool insert(int index, const T& a) = 0;
     virtual bool remove(int index) = 0;
-    virtual T retrive(int index) = 0;
+    virtual T retrieve(int index) = 0;
     virtual string toString() = 0;
 
     virtual int locate(const T& a) = 0;
