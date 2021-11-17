@@ -353,19 +353,19 @@ T LinkedList<T>::back() // --- Returning the last element ---
 }
 
 template <class T>
-void LinkedList<T>::removeAll(const T &a) //TODO
+void LinkedList<T>::removeAll(const T &a) // --- Remove all apearances of given element ---
 {
-    if (!isEmpty())
+    if (!isEmpty()) // Checking if the list isn't empty.
     {
         Node<T> *current = head;
         for (int i = 0; i < size; i++)
         {
-            if (current->data == a)
-            {
-                remove(i);
-                i--;
-            }
-            current = current->pNext;
+            if (current->data == a)   //
+            {                         //
+                remove(i);            // Removing.
+                i--;                  //
+            }                         //
+            current = current->pNext; //
         }
     }
     else
@@ -377,7 +377,7 @@ void LinkedList<T>::removeAll(const T &a) //TODO
 template <class T>
 void LinkedList<T>::makeUnique() // --- Remove all not-unique elements ---
 {
-    if (!isEmpty())
+    if (!isEmpty()) // Checking if the list isn't empty.
     {
         Node<T> *ptr1 = head;    //
         Node<T> *ptr2 = nullptr; // Creating hepling pointers.
@@ -434,7 +434,7 @@ void LinkedList<T>::reverse()
 }
 
 template <class T>
-void LinkedList<T>::removeSecondElements()
+void LinkedList<T>::removeSecondElements() // --- Remove all second element after the first element ---
 {
     if (!isEmpty()) // Checking if the list isn't empty.
     {
@@ -449,7 +449,7 @@ void LinkedList<T>::removeSecondElements()
         }
         else
         {
-            remove(0);
+            remove(0); // Removing first element even if size of Linked List is less than 3.
         }
     }
     else
