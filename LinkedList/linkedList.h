@@ -69,8 +69,6 @@ int LinkedList<T>::getLength()
     return size;
 }
 
-
-
 template <class T>
 bool LinkedList<T>::insert(int index, const T &a)
 {
@@ -151,7 +149,8 @@ bool LinkedList<T>::isEmpty() // --- Checking if the list is empty ---
     return size == 0;
 }
 
-_NODISCARD inline string to_string(string str) { // convert int to string
+_NODISCARD inline string to_string(string str)
+{ // convert int to string
     return str;
 }
 
@@ -163,12 +162,12 @@ string LinkedList<T>::toString() // --- Converting list to a string ---
 
     while (current->pNext != nullptr) // Moving througth the list and fiiling the container.
     {
-        
+
         LinkedListStr += to_string(current->data);
         LinkedListStr += ", ";
         current = current->pNext;
     }
-    
+
     LinkedListStr += to_string(current->data);
     return LinkedListStr = "[" + LinkedListStr + "]"; //Adding brackets
 }
@@ -203,7 +202,7 @@ T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" oper
 
     if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
     {
-        return -1;
+        throw "Index does not fit the list limits";
     }
 
     int counter = 0; // Seting up a counter.
@@ -419,14 +418,14 @@ void LinkedList<T>::reverse()
         Node<T> *prev = nullptr; // Creating helping pointers.
         Node<T> *current = head; //
 
-        while (current != nullptr) // Reversing list.
-        {
-            temp = current->pNext;
-            current->pNext = prev;
-            prev = current;
-            current = temp;
-        }
-        head = prev;
+        while (current != nullptr) //
+        {                          //
+            temp = current->pNext; //
+            current->pNext = prev; //
+            prev = current;        // Reversing list.
+            current = temp;        //
+        }                          //
+        head = prev;               //
     }
 }
 
