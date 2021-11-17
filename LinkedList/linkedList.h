@@ -42,12 +42,15 @@ public:
     bool push_front(T data);
     bool pop_front();
     bool pop_back();
-    void clear();
 
     void removeDuplicates();
     void makeUnique();
     void reverse();
     void removeSecondElements();
+
+    exception EmptyException = "Linked List is empty and not operable";
+private:
+    void clear();
 };
 
 template <class T>
@@ -196,26 +199,26 @@ bool LinkedList<T>::push_back(T data) // --- Adding new element in the end of th
     return true;
 }
 
-template <class T>
-T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" operator to get easier access to the elements ---
-{
+// template <class T>
+// T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" operator to get easier access to the elements ---
+// {
 
-    if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
-    {
-        throw "Index does not fit the list limits";
-    }
+//     if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
+//     {
+//         throw "Index does not fit the list limits";
+//     }
 
-    int counter = 0; // Seting up a counter.
-    Node<T> *current = this->head;
-    while (current != nullptr)
-    {
-        if (counter == index) // Cheking if counter equals to index and returning data of this element.
-        {
-            return current->data;
-        }
-        current = current->pNext; // Moving throught the elements.
-    }
-}
+//     int counter = 0; // Seting up a counter.
+//     Node<T> *current = this->head;
+//     while (current != nullptr)
+//     {
+//         if (counter == index) // Cheking if counter equals to index and returning data of this element.
+//         {
+//             return current->data;
+//         }
+//         current = current->pNext; // Moving throught the elements.
+//     }
+// }
 
 template <class T>
 bool LinkedList<T>::push_front(T data) // --- Adding new element in the begining of the list ---
@@ -239,6 +242,10 @@ bool LinkedList<T>::pop_front() // --- Remove element in the begining of the lis
         delete temp;          // Deleting "old" first element.
         size--;               // Decreasing size.
         return true;
+    }
+    else
+    {
+        throw this->EmptyException;
     }
 }
 
@@ -376,6 +383,10 @@ void LinkedList<T>::removeDuplicates() //TODO
             ptr1 = ptr1->pNext;
         }
     }
+    else
+    {
+        throw this->EmptyException;
+    }
 }
 
 template <class T>
@@ -407,6 +418,10 @@ void LinkedList<T>::makeUnique() // --- Remove all not-unique elements ---
             ptr1 = ptr1->pNext; // Moving througth the list.
         }
     }
+    else
+    {
+        throw this->EmptyException;
+    }
 }
 
 template <class T>
@@ -427,6 +442,10 @@ void LinkedList<T>::reverse()
         }                          //
         head = prev;               //
     }
+    else
+    {
+        throw this->EmptyException;
+    }
 }
 
 template <class T>
@@ -434,12 +453,23 @@ void LinkedList<T>::removeSecondElements()
 {
     if (!isEmpty()) // Checking if the list isn't empty.
     {
-        Node<T> *current = head;       // Creating pointer to the "head" of the list.
-        for (int i = 0; i < size; i++) // Iterating througth the list and removing every 3-rd element.
+        if (size > 3)
         {
-            remove(i + 2);
+            Node<T> *current = head;       // Creating pointer to the "head" of the list.
+            for (int i = 0; i < size; i++) // Iterating througth the list and removing every 3-rd element.
+            {
+                remove(i + 2);
+            }
+            pop_front(); // Removing first element.
         }
-        pop_front(); // Removing first element.
+        else
+        {
+            remove(0);
+        }
+    }
+    else 
+    {
+        throw this->EmptyException;
     }
 }
 
