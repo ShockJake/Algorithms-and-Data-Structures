@@ -43,12 +43,13 @@ public:
     bool pop_front();
     bool pop_back();
 
-    void removeDuplicates();
+    void removeAll(const T &a);
     void makeUnique();
     void reverse();
     void removeSecondElements();
 
-    exception EmptyException = "Linked List is empty and not operable";
+    string EmptyException = "Linked List is empty and not operable";
+
 private:
     void clear();
 };
@@ -243,16 +244,12 @@ bool LinkedList<T>::pop_front() // --- Remove element in the begining of the lis
         size--;               // Decreasing size.
         return true;
     }
-    else
-    {
-        throw this->EmptyException;
-    }
 }
 
 template <class T>
 bool LinkedList<T>::pop_back() // --- Remove element in the end of the list ---
 {
-    remove(size - 1); // Removing last element using method remove();
+    return remove(size - 1); // Removing last element using method remove();
 }
 
 template <class T>
@@ -356,31 +353,19 @@ T LinkedList<T>::back() // --- Returning the last element ---
 }
 
 template <class T>
-void LinkedList<T>::removeDuplicates() //TODO
+void LinkedList<T>::removeAll(const T &a) //TODO
 {
     if (!isEmpty())
     {
-        Node<T> *ptr1 = head;
-        Node<T> *ptr2 = nullptr;
-        Node<T> *dup = nullptr;
-        while (ptr1 != nullptr && ptr1->pNext != nullptr)
+        Node<T> *current = head;
+        for (int i = 0; i < size; i++)
         {
-            ptr2 = ptr1;
-            while (ptr2->pNext != nullptr)
+            if (current->data == a)
             {
-                if (ptr1->data == ptr2->pNext->data)
-                {
-                    dup = ptr2->pNext;
-                    ptr2->pNext = ptr2->pNext->pNext;
-                    size--;
-                    delete (dup);
-                }
-                else
-                {
-                    ptr2 = ptr2->pNext;
-                }
+                remove(i);
+                i--;
             }
-            ptr1 = ptr1->pNext;
+            current = current->pNext;
         }
     }
     else
@@ -467,7 +452,7 @@ void LinkedList<T>::removeSecondElements()
             remove(0);
         }
     }
-    else 
+    else
     {
         throw this->EmptyException;
     }

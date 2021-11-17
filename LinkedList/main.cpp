@@ -17,13 +17,19 @@ int main(int argc, char const *argv[])
         cout << list.toString() << endl;
         list.removeSecondElements();
         cout << list.toString() << endl;
-    
+        list.pop_back();
+        list.pop_back();
+        list.pop_back();
+        list.pop_back();
+        list.pop_back();
+        list.pop_back();
+        list.pop_back();
+        list.makeUnique();
     }
-    catch(const std::exception e)
+    catch (const exception &e)
     {
         std::cerr << e.what() << '\n';
     }
-    
-    
+
     return 0;
 }
