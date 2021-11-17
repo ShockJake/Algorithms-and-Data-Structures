@@ -163,7 +163,9 @@ T ArrayList<T>::retrieve(int index) // --- Retriving element form array ---
     return items[index];
 }
 
-
+_NODISCARD inline string to_string(string str) {
+    return str;
+}
 
 template <class T>
 string ArrayList<T>::toString() // --- Converting array to string ---
