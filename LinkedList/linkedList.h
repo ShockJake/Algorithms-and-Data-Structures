@@ -48,7 +48,21 @@ public:
     void reverse();
     void removeSecondElements();
 
-    string EmptyException = "Linked List is empty and not operable";
+    class EmptyListException : public exception
+    {
+        const char[] what() const throw() 
+        {
+            return "List is empty and not operable\n";
+        }
+    };
+
+    class BadIndexException : public exception
+    {
+        const char[] what() const throw() 
+        {
+            return "Index does not fit the limits of the list\n-1\n";
+        }
+    };
 
 private:
     void clear();
@@ -105,7 +119,7 @@ T LinkedList<T>::retrive(int index) // --- Returning element in th given index -
 {
     if (index < 0 || index > size) // Cheking if index fits the limits of the list
     {
-        throw "Index does not fit the limits of the list\n-1\n";
+        throw BadIndexException;
     }
 
     Node<T> *current = head;        // Creating pointer to the head.
@@ -349,7 +363,7 @@ void LinkedList<T>::removeAll(const T &a) // --- Remove all apearances of given 
     }
     else
     {
-        throw this->EmptyException;
+        throw EmptyListException;
     }
 }
 
@@ -384,7 +398,7 @@ void LinkedList<T>::makeUnique() // --- Remove all not-unique elements ---
     }
     else
     {
-        throw this->EmptyException;
+        throw EmptyListException;
     }
 }
 
@@ -408,7 +422,7 @@ void LinkedList<T>::reverse()
     }
     else
     {
-        throw this->EmptyException;
+        throw EmptyListException;
     }
 }
 
@@ -433,7 +447,7 @@ void LinkedList<T>::removeSecondElements() // --- Remove all second element afte
     }
     else
     {
-        throw this->EmptyException;
+        throw EmptyListException;
     }
 }
 
