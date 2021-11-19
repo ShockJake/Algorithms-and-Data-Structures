@@ -6,7 +6,7 @@ template <class T>
 class LinkedList : public List<T>
 {
 private:
-    template <class T>
+    template <class U>
     class Node
     {
     public:
@@ -50,7 +50,7 @@ public:
 
     class EmptyListException : public exception
     {
-        const char[] what() const throw() 
+        const char *what() const throw()
         {
             return "List is empty and not operable\n";
         }
@@ -58,7 +58,7 @@ public:
 
     class BadIndexException : public exception
     {
-        const char[] what() const throw() 
+        const char *what() const throw()
         {
             return "Index does not fit the limits of the list\n-1\n";
         }
@@ -119,7 +119,7 @@ T LinkedList<T>::retrive(int index) // --- Returning element in th given index -
 {
     if (index < 0 || index > size) // Cheking if index fits the limits of the list
     {
-        throw BadIndexException;
+        throw BadIndexException();
     }
 
     Node<T> *current = head;        // Creating pointer to the head.
@@ -167,7 +167,7 @@ bool LinkedList<T>::isEmpty() // --- Checking if the list is empty ---
     return size == 0;
 }
 
-_NODISCARD inline string to_string(string str)
+string to_string(string str)
 { // convert int to string
     return str;
 }
@@ -363,7 +363,7 @@ void LinkedList<T>::removeAll(const T &a) // --- Remove all apearances of given 
     }
     else
     {
-        throw EmptyListException;
+        throw EmptyListException();
     }
 }
 
@@ -398,7 +398,7 @@ void LinkedList<T>::makeUnique() // --- Remove all not-unique elements ---
     }
     else
     {
-        throw EmptyListException;
+        throw EmptyListException();
     }
 }
 
@@ -422,7 +422,7 @@ void LinkedList<T>::reverse()
     }
     else
     {
-        throw EmptyListException;
+        throw EmptyListException();
     }
 }
 
@@ -447,7 +447,7 @@ void LinkedList<T>::removeSecondElements() // --- Remove all second element afte
     }
     else
     {
-        throw EmptyListException;
+        throw EmptyListException();
     }
 }
 
