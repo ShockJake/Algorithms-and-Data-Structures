@@ -200,27 +200,6 @@ bool LinkedList<T>::push_back(T data) // --- Adding new element in the end of th
     return true;
 }
 
-// template <class T>
-// T &LinkedList<T>::operator[](const int index) // --- Overloading "brackets" operator to get easier access to the elements ---
-// {
-
-//     if (index > size + 1 || index < 0) // Cheking if index fits the limits of the list
-//     {
-//         throw "Index does not fit the list limits";
-//     }
-
-//     int counter = 0; // Seting up a counter.
-//     Node<T> *current = this->head;
-//     while (current != nullptr)
-//     {
-//         if (counter == index) // Cheking if counter equals to index and returning data of this element.
-//         {
-//             return current->data;
-//         }
-//         current = current->pNext; // Moving throught the elements.
-//     }
-// }
-
 template <class T>
 bool LinkedList<T>::push_front(T data) // --- Adding new element in the begining of the list ---
 {
