@@ -9,3 +9,5 @@ LinkedList/main.obj
 LinkedList/vc140.pdb
 ArrayList/main.obj
 ArrayList/vc140.pdb
+ArrayList/.vscode/launch.json
+ArrayList/.vscode/tasks.json

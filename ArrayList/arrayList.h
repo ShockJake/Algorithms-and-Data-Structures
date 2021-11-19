@@ -163,7 +163,7 @@ T ArrayList<T>::retrieve(int index) // --- Retriving element form array ---
     return items[index];
 }
 
-_NODISCARD inline string to_string(string str) {
+string to_string(string str) {
     return str;
 }
 
@@ -240,7 +240,7 @@ int ArrayList<T>::last() // --- Retriving location of last element ---
 template <class T>
 int ArrayList<T>::back() // --- Retriving last element ---
 {
-    return retrive(item_size - 1);
+    return retrieve(item_size - 1);
 }
 
 template <class T>
@@ -289,7 +289,7 @@ void ArrayList<T>::makeUnique() // --- Removing all elements that are not unique
 {
     for (int i = 0; i < item_size; ++i)
     {
-        T element = retrive(i);                 //Taking element.
+        T element = retrieve(i);                 //Taking element.
         for (int j = i + 1; j < item_size; ++j) //Checking if following elements are equal to taken element.
         {
             if (element == items[j])
@@ -307,7 +307,7 @@ void ArrayList<T>::removeDuplicates() // --- Removing repeating elements ---
     int counter = 0;
     for (int i = 0; i < item_size; ++i) //First walk through array to collect information how many times the element meets in array
     {
-        T element = retrive(i);
+        T element = retrieve(i);
         for (int j = i; j < item_size; ++j)
         {
             if (element == items[j])
