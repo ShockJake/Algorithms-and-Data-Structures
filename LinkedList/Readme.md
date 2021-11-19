@@ -105,15 +105,16 @@ index - position of element that will be removed.
 
 #### Dominating operation:
 
-> Assignment.
+> Deleating first or last element (depends on index) or moving througth the List.
 
 ```C++
 //examples of dominating operation
-items[i] = items[i + 1]; //line 141
-newArray[i] = items[i]; //line 148
+for (int i = 0; i < index - 1; i++) // Finding element that goes before the element of the given index.
+{
+    previous = previous->pNext;
+}
 ```
-
----
+___
 
 ```C++
 T retrive(int index);
@@ -130,10 +131,10 @@ index - position of element that will be returned.
 > Moving throgth the Linked List.
 
 ```C++
-    for (int i = 0; i < index; i++)
-    {
-        current = current->pNext;
-    }
+for (int i = 0; i < index; i++)
+{
+    current = current->pNext;
+}
 ```
 
 ---
