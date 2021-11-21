@@ -14,3 +14,6 @@ ArrayList/.vscode/tasks.json
 LinkedList/main
 LinkedList/.vscode/tasks.json
 LinkedList/.vscode/launch.json
+ArrayBasedStack/.vscode/launch.json
+ArrayBasedStack/.vscode/settings.json
+ArrayBasedStack/.vscode/tasks.json

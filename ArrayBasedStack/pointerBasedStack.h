@@ -16,6 +16,7 @@ public:
     bool isEmpty();
     int size();
     bool isFull();
+
     class FullStackException : public exception
     {
         const char *what() throw()
@@ -56,7 +57,7 @@ void PointerBasedStack<T>::push(const T &element)
 template <class T>
 T PointerBasedStack<T>::pop()
 {
-    if(isEmpty())
+    if (isEmpty())
     {
         throw EmptyStackException();
     }
@@ -69,7 +70,7 @@ T PointerBasedStack<T>::pop()
 template <class T>
 T PointerBasedStack<T>::peek()
 {
-    if(isEmpty())
+    if (isEmpty())
     {
         throw EmptyStackException();
     }
