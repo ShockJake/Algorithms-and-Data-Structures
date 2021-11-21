@@ -37,7 +37,7 @@ public:
     void printArrayList();
     void makeUnique();
     void removeDuplicates();
-    void revesre();
+    void reverse();
 };
 
 #include <iostream>
@@ -330,7 +330,7 @@ void ArrayList<T>::removeDuplicates() // --- Removing repeating elements ---
 }
 
 template <class T>
-void ArrayList<T>::revesre() // --- Reversing of array ---
+void ArrayList<T>::reverse() // --- Reversing of array ---
 {
     if (item_size <= 1) //Checking if number of elements is bigger than 1.
     {

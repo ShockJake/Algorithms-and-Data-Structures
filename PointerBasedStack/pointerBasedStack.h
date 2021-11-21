@@ -17,6 +17,8 @@ public:
     int size();
     bool isFull();
 
+    std::string toString();
+
     class FullStackException : public exception
     {
         const char *what() throw()
@@ -76,7 +78,7 @@ T PointerBasedStack<T>::peek()
     }
     else
     {
-        stack.retrieve(stack.last());
+        stack.retrieve(stack.getLength());
     }
 }
 
@@ -96,4 +98,10 @@ template <class T>
 bool PointerBasedStack<T>::isFull()
 {
     return size() == max_size;
+}
+
+template <class T>
+std::string PointerBasedStack<T>::toString()
+{
+    return stack->toString();
 }
