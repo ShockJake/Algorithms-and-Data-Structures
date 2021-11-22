@@ -23,17 +23,17 @@ public:
     T retrieve(int index) override;
     string toString() override;
 
-    int locate(const T &a) override;
-    int end() override;
-    int first() override;
-    int next(int index) override;
-    int previous(int index) override;
-    int last() override;
-    int back() override;
-    void push_front(const T &a) override;
-    void push_back(const T &a) override;
-    bool pop_front() override;
-    bool pop_back() override;
+    int locate(const T &a);
+    int end();
+    int first();
+    int next(int index);
+    int previous(int index);
+    int last();
+    int back();
+    void push_front(const T &a);
+    void push_back(const T &a);
+    bool pop_front();
+    bool pop_back();
     void printArrayList();
     void makeUnique();
     void removeDuplicates();

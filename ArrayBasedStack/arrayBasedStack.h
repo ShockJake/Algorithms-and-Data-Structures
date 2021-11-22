@@ -52,7 +52,7 @@ void ArrayBasedStack<T>::push(const T &element)
     }
     else
     {
-        stack.push_back(element);
+        stack->push_back(element);
     }
 }
 
@@ -65,8 +65,8 @@ T ArrayBasedStack<T>::pop()
     }
     else
     {
-        T element = stack.retrieve(stack.last());
-        stack.pop_back();
+        T element = stack->retrieve(stack->last());
+        stack->pop_back();
         return element;
     }
 }
@@ -80,20 +80,20 @@ T ArrayBasedStack<T>::peek()
     }
     else
     {
-        return stack.retrieve(stack.last());
+        return stack->retrieve(stack->last());
     }
 }
 
 template <class T>
 bool ArrayBasedStack<T>::isEmpty()
 {
-    return stack.isEmpty();
+    return stack->isEmpty();
 }
 
 template <class T>
 int ArrayBasedStack<T>::size()
 {
-    return stack.getLength();
+    return stack->getLength();
 }
 
 template <class T>
