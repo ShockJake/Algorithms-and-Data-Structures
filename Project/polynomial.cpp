@@ -1,12 +1,13 @@
 #include "polynomial.hpp"
 #include <string>
+
 Polynomial::Polynomial()
 {
     this->array = {};
     this->size = 0;
 }
 
-Polynomial::Polynomial(double arg, int number)
+Polynomial::Polynomial(double arg = 0, int number)
 {
     this->size = number + 1;
     this->array = new double[number];
@@ -150,12 +151,13 @@ Polynomial Polynomial::operator*(const Polynomial &other)
 {
     if(this->size < 1 || other.size < 1)
     {
-        return Polynomial();
+        Polynomial zero_poly;
+        return zero_poly;
     }
-    Polynomial result;
+    Polynomial result(0, this->size + other.size + 1);
     for (int i = 0; i < (this->size + other.size); i++)
     {
-        result.array[i] = 0;
+        result.array[i];
     }
     for (int i = 0; i < this->size; i++)
     {

@@ -13,6 +13,7 @@ int main()
     cout << p3.toString() << endl;
     p3 += p;
     cout << p3.toString() << endl;
-    
+    Polynomial p4(0, 6);
+    cout << p4.toString() << endl;
     return 0;
 }

@@ -16,14 +16,14 @@ public:
     Polynomial();
     Polynomial(int size, double arr[] = {}) : size(size), array(arr){};
     Polynomial(double arg, int number);
-    ~Polynomial() {};
+    ~Polynomial(){};
 
     Polynomial operator+(const Polynomial &other);
     Polynomial operator-(const Polynomial &other);
     Polynomial operator*(const Polynomial &other);
     Polynomial operator=(const Polynomial &other);
-    Polynomial& operator+=(const Polynomial& right);
-    Polynomial& operator-=(const Polynomial& right);
+    Polynomial &operator+=(const Polynomial &right);
+    Polynomial &operator-=(const Polynomial &right);
     bool operator==(const Polynomial &other);
     bool operator!=(const Polynomial &other);
 
@@ -31,17 +31,17 @@ public:
     Polynomial diff();
     Polynomial integrate();
     Polynomial combine();
-    
+
     void negation();
     bool is_zero();
     double eval(Polynomial &other);
-    
+
     string toString();
     string representation();
 
-    class EmptyPolynomialException : public exception 
+    class EmptyPolynomialException : public exception
     {
-        const char *what() const throw() 
+        const char *what() const throw()
         {
             return "The polynomial equals 0";
         }
