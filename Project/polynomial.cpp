@@ -7,15 +7,15 @@ Polynomial::Polynomial()
     this->size = 0;
 }
 
-Polynomial::Polynomial(double arg = 0, int number)
+Polynomial::Polynomial(double arg, int number)
 {
     this->size = number + 1;
-    this->array = new double[number];
-    for (int i = 0; i < number; i++)
+    this->array = new double[number + 1];
+    for (int i = 0; i < number + 1; i++)
     {
         array[i] = 0;
     }
-    array[number - 1] = arg;
+    array[number] = arg;
 }
 
 string Polynomial::toString()
@@ -93,19 +93,25 @@ Polynomial Polynomial::operator-(const Polynomial &other)
 
     if (other.size == 0)
     {
+        double *temp = newPoly.array;
         newPoly.array = this->array;
+        delete[] temp;
         newPoly.size = this->size;
         return newPoly;
     }
 
     if (this->size >= other.size)
     {
+        double *temp = newPoly.array;
         newPoly.array = new double[this->size];
+        delete[] temp;
         newPoly.size = this->size;
     }
     else
     {
+        double *temp = newPoly.array;
         newPoly.array = new double[other.size];
+        delete[] temp;
         newPoly.size = other.size;
     }
     for (int i = 0; i < newPoly.size; i++)
@@ -147,23 +153,59 @@ Polynomial &Polynomial::operator-=(const Polynomial &right)
     return *this;
 }
 
+Polynomial Polynomial::operator*(const int &number)
+{
+    Polynomial result;
+    if (this->size == 0)
+    {
+        return result;
+    }
+    if (this->size == 1)
+    {
+        double *temp = result.array;
+        result.array = this->array;
+        result.size = this->size;
+        delete[] temp;
+        result.array[0] *= number;
+        return result;
+    }
+
+    for (int i = 0; i < this->size; i++)
+    {
+        result.array[i] = this->array[i] * number;
+    }
+    return result;
+}
+
 Polynomial Polynomial::operator*(const Polynomial &other)
 {
-    if(this->size < 1 || other.size < 1)
+    Polynomial result;
+    if (this->size == 0 || other.size == 0)
     {
-        Polynomial zero_poly;
-        return zero_poly;
+        return result;
     }
-    Polynomial result(0, this->size + other.size + 1);
-    for (int i = 0; i < (this->size + other.size); i++)
+    if (this->size == 1 && other.size == 1)
     {
-        result.array[i];
+        double *temp = result.array;
+        result.array = this->array;
+        result.size = this->size;
+        delete[] temp;
+        result.array[0] *= other.array[0];
+        return result;
+    }
+    double *temp = result.array;
+    result.array = new double[this->size - 1 + other.size - 1 + 1];
+    result.size = this->size - 1 + other.size - 1 + 1;
+    delete[] temp;
+    for (int i = 0; i < result.size; i++)
+    {
+        result.array[i] = 0.0;
     }
     for (int i = 0; i < this->size; i++)
     {
         for (int j = 0; j < other.size; j++)
         {
-            result.array[i+j] += this->array[i] * other.array[j];
+            result.array[i + j] = this->array[i] * other.array[j];
         }
     }
     return result;

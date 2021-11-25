@@ -21,6 +21,7 @@ public:
     Polynomial operator+(const Polynomial &other);
     Polynomial operator-(const Polynomial &other);
     Polynomial operator*(const Polynomial &other);
+    Polynomial operator*(const int& number);
     Polynomial operator=(const Polynomial &other);
     Polynomial &operator+=(const Polynomial &right);
     Polynomial &operator-=(const Polynomial &right);
