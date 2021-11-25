@@ -57,6 +57,14 @@ bool Polynomial::operator!=(const Polynomial &other)
 Polynomial Polynomial::operator+(const Polynomial &other)
 {
     Polynomial newPoly;
+
+    if (other.size == 0)
+    {
+        newPoly.array = this->array;
+        newPoly.size = this->size;
+        return newPoly;
+    }
+
     if (this->size >= other.size)
     {
         newPoly.array = new double[this->size];
@@ -81,6 +89,14 @@ Polynomial Polynomial::operator+(const Polynomial &other)
 Polynomial Polynomial::operator-(const Polynomial &other)
 {
     Polynomial newPoly;
+
+    if (other.size == 0)
+    {
+        newPoly.array = this->array;
+        newPoly.size = this->size;
+        return newPoly;
+    }
+
     if (this->size >= other.size)
     {
         newPoly.array = new double[this->size];
@@ -128,4 +144,25 @@ Polynomial &Polynomial::operator-=(const Polynomial &right)
 {
     *this = this->operator-(right);
     return *this;
+}
+
+Polynomial Polynomial::operator*(const Polynomial &other)
+{
+    if(this->size < 1 || other.size < 1)
+    {
+        return Polynomial();
+    }
+    Polynomial result;
+    for (int i = 0; i < (this->size + other.size); i++)
+    {
+        result.array[i] = 0;
+    }
+    for (int i = 0; i < this->size; i++)
+    {
+        for (int j = 0; j < other.size; j++)
+        {
+            result.array[i+j] += this->array[i] * other.array[j];
+        }
+    }
+    return result;
 }

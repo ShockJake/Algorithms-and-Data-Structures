@@ -38,6 +38,14 @@ public:
     
     string toString();
     string representation();
+
+    class EmptyPolynomialException : public exception 
+    {
+        const char *what() const throw() 
+        {
+            return "The polynomial equals 0";
+        }
+    };
 };
 
 #endif // POLYNOMIAL_HPP
