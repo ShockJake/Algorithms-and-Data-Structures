@@ -194,18 +194,22 @@ Polynomial Polynomial::operator*(const Polynomial &other)
         return result;
     }
     double *temp = result.array;
-    result.array = new double[this->size - 1 + other.size - 1 + 1];
+    result.array = new double[(this->size - 1) + (other.size - 1) + 2];
     result.size = this->size - 1 + other.size - 1 + 1;
     delete[] temp;
-    for (int i = 0; i < result.size; i++)
+
+    result.array[0] = this->array[0];
+    result.array[0] *= other.array[0];
+
+    for (int i = 1; i < result.size; i++)
     {
         result.array[i] = 0.0;
     }
-    for (int i = 0; i < this->size; i++)
+    for (int i = 1; i < this->size; i++)
     {
         for (int j = 0; j < other.size; j++)
         {
-            result.array[i + j] = this->array[i] * other.array[j];
+            result.array[i + j] += this->array[i] * other.array[j];
         }
     }
     return result;

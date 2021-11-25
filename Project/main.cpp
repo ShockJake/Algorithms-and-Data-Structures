@@ -10,6 +10,8 @@ int main()
     Polynomial p3;
     p3 = p2 * p1;
     cout << p3.toString() << endl;
+    p3 = p1 * p2;
+    cout << p3.toString() << endl;
 
     return 0;
 }

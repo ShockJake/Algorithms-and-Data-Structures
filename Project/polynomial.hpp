@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int MAX_SIZE = 12;
+const int MAX_SIZE = 9;
 
 class Polynomial
 {
