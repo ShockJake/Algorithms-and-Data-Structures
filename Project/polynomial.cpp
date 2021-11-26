@@ -184,33 +184,26 @@ Polynomial Polynomial::operator*(const Polynomial &other)
     {
         return result;
     }
-    if (this->size == 1 && other.size == 1)
-    {
-        double *temp = result.array;
-        result.array = this->array;
-        result.size = this->size;
-        delete[] temp;
-        result.array[0] *= other.array[0];
-        return result;
-    }
+
+    int new_size = this->size + other.size - 1;
+
     double *temp = result.array;
-    result.array = new double[(this->size - 1) + (other.size - 1) + 2];
-    result.size = this->size - 1 + other.size - 1 + 1;
+    result.array = new double[new_size];
+    result.size = new_size;
     delete[] temp;
-
-    result.array[0] = this->array[0];
-    result.array[0] *= other.array[0];
-
-    for (int i = 1; i < result.size; i++)
+    
+    for (int i = 0; i < new_size; i++)
     {
-        result.array[i] = 0.0;
+        result.array[i] = 0;
     }
-    for (int i = 1; i < this->size; i++)
+
+    for (int i = 0; i < this->size; i++)
     {
         for (int j = 0; j < other.size; j++)
         {
             result.array[i + j] += this->array[i] * other.array[j];
         }
     }
+
     return result;
 }
