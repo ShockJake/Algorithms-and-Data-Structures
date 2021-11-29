@@ -13,32 +13,32 @@ private:
     int size;
 
 public:
-    Polynomial();
+    Polynomial(); //+
     Polynomial(int size, double arr[] = {}) : size(size), array(arr){};
-    Polynomial(double arg, int number);
+    Polynomial(double arg, int number); //+
     ~Polynomial(){};
 
-    Polynomial operator+(const Polynomial &other);
-    Polynomial operator-(const Polynomial &other);
-    Polynomial operator*(const Polynomial &other);
-    Polynomial operator*(const int& number);
-    Polynomial operator=(const Polynomial &other);
-    Polynomial &operator+=(const Polynomial &right);
-    Polynomial &operator-=(const Polynomial &right);
-    bool operator==(const Polynomial &other);
-    bool operator!=(const Polynomial &other);
+    Polynomial operator+(const Polynomial &other); //+
+    Polynomial operator-(const Polynomial &other); //+
+    Polynomial operator*(const Polynomial &other); //+
+    Polynomial operator*(const int& number); //+
+    Polynomial operator=(const Polynomial &other); //+
+    Polynomial &operator+=(const Polynomial &right); //+
+    Polynomial &operator-=(const Polynomial &right); //+
+    bool operator==(const Polynomial &other); //+
+    bool operator!=(const Polynomial &other); //+
 
-    Polynomial pow(int n);
+    Polynomial pow(int n); //+
     Polynomial diff();
     Polynomial integrate();
     Polynomial combine();
 
     void negation();
-    bool is_zero();
+    bool is_zero(); //+
     double eval(Polynomial &other);
 
-    string toString();
-    string representation();
+    string toString(); //+
+    string representation(); //+
 
     class EmptyPolynomialException : public exception
     {

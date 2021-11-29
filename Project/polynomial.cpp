@@ -34,6 +34,32 @@ string Polynomial::toString()
     return result;
 }
 
+string Polynomial::representation()
+{
+    if (is_zero())
+    {
+        throw EmptyPolynomialException();
+    }
+    string result = "";
+    result += to_string(array[0]);
+    for (int i = 1; i < size; i++)
+    {
+        if(array[i] == 0)
+        {
+            continue;
+        }
+        if (i < 2)
+        {
+            result += " + " + to_string(array[i]) + "x";
+        }
+        else
+        {
+            result += " + " + to_string(array[i]) + "x^" + to_string(i);
+        }
+    }
+    return result;
+}
+
 bool Polynomial::operator==(const Polynomial &other)
 {
     if (this->size != other.size)
@@ -143,12 +169,24 @@ Polynomial Polynomial::operator=(const Polynomial &other)
 
 Polynomial &Polynomial::operator+=(const Polynomial &right)
 {
+    if (this->array == nullptr)
+    {
+        this->array = right.array;
+        this->size = right.size;
+        return *this;
+    }
     *this = this->operator+(right);
     return *this;
 }
 
 Polynomial &Polynomial::operator-=(const Polynomial &right)
 {
+    if (this->array == nullptr)
+    {
+        this->array = right.array;
+        this->size = right.size;
+        return *this;
+    }
     *this = this->operator-(right);
     return *this;
 }
@@ -191,7 +229,7 @@ Polynomial Polynomial::operator*(const Polynomial &other)
     result.array = new double[new_size];
     result.size = new_size;
     delete[] temp;
-    
+
     for (int i = 0; i < new_size; i++)
     {
         result.array[i] = 0;
@@ -206,4 +244,39 @@ Polynomial Polynomial::operator*(const Polynomial &other)
     }
 
     return result;
+}
+
+Polynomial Polynomial::pow(int n)
+{
+    if (n == 0)
+    {
+        double result[1] = {1.0};
+        return Polynomial(1, result);
+    }
+    if (n == 1)
+    {
+        return *this;
+    }
+    return *this * pow(--n);
+}
+
+Polynomial Polynomial::diff()
+{
+    if (size != 0)
+    {
+        array[0] += array[1];
+        array[1] = 0;
+        for (int i = 1; i < size - 1; i++)
+        {
+            array[i] = array[i + 1];
+            array[i + 1] = 0;
+        }
+        return Polynomial(size, array);
+    }
+    return Polynomial(size, array);
+}
+
+bool Polynomial::is_zero()
+{
+    return size == 0;
 }
