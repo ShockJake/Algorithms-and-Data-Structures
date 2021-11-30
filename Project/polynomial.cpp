@@ -44,7 +44,7 @@ string Polynomial::representation()
     result += to_string(array[0]);
     for (int i = 1; i < size; i++)
     {
-        if(array[i] == 0)
+        if (array[i] == 0.0)
         {
             continue;
         }
@@ -268,7 +268,7 @@ Polynomial Polynomial::diff()
         array[1] = 0;
         for (int i = 1; i < size - 1; i++)
         {
-            array[i] = array[i + 1];
+            array[i] = (i + 1) * array[i + 1];
             array[i + 1] = 0;
         }
         return Polynomial(size, array);
@@ -279,4 +279,26 @@ Polynomial Polynomial::diff()
 bool Polynomial::is_zero()
 {
     return size == 0;
+}
+
+Polynomial Polynomial::integrate()
+{
+    if (!is_zero())
+    {
+        double *newArray = new double[size + 1];
+        for (int i = 0; i < size; i++)
+        {
+            newArray[i] = array[i];
+        }
+        delete[] array;
+        array = newArray;
+        size++;
+        for (int i = size; i > 0; i--)
+        {
+            array[i] = array[i - 1] / (i + 1);
+            array[i - 1] = 0;
+        }
+        return Polynomial(size, array);
+    }
+    return Polynomial(size, array);
 }

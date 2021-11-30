@@ -29,7 +29,7 @@ public:
     bool operator!=(const Polynomial &other); //+
 
     Polynomial pow(int n); //+
-    Polynomial diff();
+    Polynomial diff(); //+
     Polynomial integrate();
     Polynomial combine();
 

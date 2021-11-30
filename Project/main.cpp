@@ -11,9 +11,10 @@ int main()
 
     p3 = p1 - p2;
     p3 = p1.pow(3);
-    cout << p3.toString() << endl;
+    cout << p3.representation() << endl;
     p3.diff();
-    cout << p3.toString() << endl;
+    cout << p3.representation() << endl;
+    p3.integrate();
     cout << p3.representation() << endl;
     return 0;
 }
