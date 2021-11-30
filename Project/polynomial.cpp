@@ -207,7 +207,8 @@ Polynomial Polynomial::operator*(const int &number)
         result.array[0] *= number;
         return result;
     }
-
+    delete[] result.array;
+    result.array = new double[size];
     for (int i = 0; i < this->size; i++)
     {
         result.array[i] = this->array[i] * number;
@@ -260,6 +261,18 @@ Polynomial Polynomial::pow(int n)
     return *this * pow(--n);
 }
 
+double pow(int n1, int n2)
+{
+    if (n2 == 0)
+    {
+        return 1;
+    }
+    else
+    {
+        return n1 * pow(n1, n2 - 1);
+    }
+}
+
 Polynomial Polynomial::diff()
 {
     if (size != 0)
@@ -301,4 +314,57 @@ Polynomial Polynomial::integrate()
         return Polynomial(size, array);
     }
     return Polynomial(size, array);
+}
+
+double Polynomial::eval_by_Horner(const double &x)
+{
+    double result = 0.0;
+    for (int i = size - 1; i >= 0; i--)
+    {
+        result = array[i] + (x * result);
+    }
+    return result;
+}
+
+void Polynomial::negation()
+{
+    if (!is_zero())
+    {
+        for (int i = 0; i < size; i++)
+        {
+            array[i] *= -1;
+        }
+    }
+}
+
+int Polynomial::getSize()
+{
+    return size;
+}
+
+Polynomial Polynomial::combine(const Polynomial &_other)
+{
+    if ((!is_zero()) && _other.size != 0)
+    {
+        Polynomial result(0, (this->size - 1) * (_other.size - 1));
+        for (int i = 0; i < this->size; i++)
+        {
+            result.array[i] = this->array[i];
+        }
+        Polynomial other;
+        other = _other;
+        Polynomial temp;
+        for (int i = 1; i < this->size; i++)
+        {
+            // temp = other.pow(i);
+            // for (int i = 0; i < ; i++)
+            // {
+            //     /* code */
+            // }
+            
+        }
+
+        return result;
+    }
+    return *this;
 }

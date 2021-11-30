@@ -18,26 +18,27 @@ public:
     Polynomial(double arg, int number); //+
     ~Polynomial(){};
 
-    Polynomial operator+(const Polynomial &other); //+
-    Polynomial operator-(const Polynomial &other); //+
-    Polynomial operator*(const Polynomial &other); //+
-    Polynomial operator*(const int& number); //+
-    Polynomial operator=(const Polynomial &other); //+
+    Polynomial operator+(const Polynomial &other);   //+
+    Polynomial operator-(const Polynomial &other);   //+
+    Polynomial operator*(const Polynomial &other);   //+
+    Polynomial operator*(const int &number);         //+
+    Polynomial operator=(const Polynomial &other);   //+
     Polynomial &operator+=(const Polynomial &right); //+
     Polynomial &operator-=(const Polynomial &right); //+
-    bool operator==(const Polynomial &other); //+
-    bool operator!=(const Polynomial &other); //+
+    bool operator==(const Polynomial &other);        //+
+    bool operator!=(const Polynomial &other);        //+
 
-    Polynomial pow(int n); //+
-    Polynomial diff(); //+
-    Polynomial integrate();
-    Polynomial combine();
+    Polynomial pow(int n);  //+
+    Polynomial diff();      //+
+    Polynomial integrate(); //+
+    Polynomial combine(const Polynomial &other);
 
-    void negation();
-    bool is_zero(); //+
-    double eval(Polynomial &other);
+    int getSize();
+    void negation();                        //+
+    bool is_zero();                         //+
+    double eval_by_Horner(const double &x); //+
 
-    string toString(); //+
+    string toString();       //+
     string representation(); //+
 
     class EmptyPolynomialException : public exception
