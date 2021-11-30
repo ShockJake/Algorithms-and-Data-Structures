@@ -21,17 +21,17 @@ public:
     Polynomial operator+(const Polynomial &other);   //+
     Polynomial operator-(const Polynomial &other);   //+
     Polynomial operator*(const Polynomial &other);   //+
-    Polynomial operator*(const int &number);         //-
+    Polynomial operator*(const int &number);         //+
     Polynomial operator=(const Polynomial &other);   //+
     Polynomial &operator+=(const Polynomial &right); //+
     Polynomial &operator-=(const Polynomial &right); //+
     bool operator==(const Polynomial &other);        //+
     bool operator!=(const Polynomial &other);        //+
 
-    Polynomial pow(int n);  //+
-    Polynomial diff();      //+
-    Polynomial integrate(); //+
-    Polynomial combine(const Polynomial &other);
+    Polynomial pow(int n);                       //+
+    Polynomial diff();                           //+
+    Polynomial integrate();                      //+
+    Polynomial combine(const Polynomial &other); //+
 
     int getSize();
     void negation();                        //+

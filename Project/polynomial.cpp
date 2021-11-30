@@ -41,7 +41,7 @@ string Polynomial::representation()
         throw EmptyPolynomialException();
     }
     string result = "";
-    result += to_string(array[0]);
+    result += to_string((int)array[0]);
     for (int i = 1; i < size; i++)
     {
         if (array[i] == 0.0)
@@ -50,11 +50,11 @@ string Polynomial::representation()
         }
         if (i < 2)
         {
-            result += " + " + to_string(array[i]) + "x";
+            result += " + " + to_string((int)array[i]) + "x";
         }
         else
         {
-            result += " + " + to_string(array[i]) + "x^" + to_string(i);
+            result += " + " + to_string((int)array[i]) + "x^" + to_string(i);
         }
     }
     return result;
@@ -193,8 +193,8 @@ Polynomial &Polynomial::operator-=(const Polynomial &right)
 
 Polynomial Polynomial::operator*(const int &number)
 {
-    double* result;
-    if(!is_zero())
+    double *result;
+    if (!is_zero())
     {
         result = new double[this->size];
         for (int i = 0; i < this->size; i++)
@@ -251,18 +251,6 @@ Polynomial Polynomial::pow(int n)
     return *this * pow(--n);
 }
 
-double pow(int n1, int n2)
-{
-    if (n2 == 0)
-    {
-        return 1;
-    }
-    else
-    {
-        return n1 * pow(n1, n2 - 1);
-    }
-}
-
 Polynomial Polynomial::diff()
 {
     if (size != 0)
@@ -308,12 +296,19 @@ Polynomial Polynomial::integrate()
 
 double Polynomial::eval_by_Horner(const double &x)
 {
-    double result = 0.0;
-    for (int i = size - 1; i >= 0; i--)
+    if (!is_zero())
     {
-        result = array[i] + (x * result);
+        double result = 0.0;
+        for (int i = size - 1; i >= 0; i--)
+        {
+            result = array[i] + (x * result);
+        }
+        return result;
     }
-    return result;
+    else
+    {
+        throw EmptyPolynomialException();
+    }
 }
 
 void Polynomial::negation()
@@ -324,6 +319,10 @@ void Polynomial::negation()
         {
             array[i] *= -1;
         }
+    }
+    else
+    {
+        throw EmptyPolynomialException();
     }
 }
 
@@ -343,7 +342,7 @@ Polynomial Polynomial::combine(const Polynomial &_other)
         {
             result += other.pow(i) * this->array[i];
         }
-        
+
         return result;
     }
     return *this;
