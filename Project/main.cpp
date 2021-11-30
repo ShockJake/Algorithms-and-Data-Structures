@@ -7,10 +7,8 @@ int main()
     Polynomial p1(3, arr1);
     Polynomial p2(4, arr2);
 
-    Polynomial p3;
-    p3 = p1.pow(3);
-    cout << p1.toString() << endl;
-    cout << p2.toString() << endl;
+    Polynomial p3, p4;
+    p3 = p2.combine(p1);
     cout << p3.toString() << endl;
     return 0;
 }

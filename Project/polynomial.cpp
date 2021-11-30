@@ -193,27 +193,17 @@ Polynomial &Polynomial::operator-=(const Polynomial &right)
 
 Polynomial Polynomial::operator*(const int &number)
 {
-    Polynomial result;
-    if (this->size == 0)
+    double* result;
+    if(!is_zero())
     {
-        return result;
+        result = new double[this->size];
+        for (int i = 0; i < this->size; i++)
+        {
+            result[i] = this->array[i] * number;
+        }
+        return Polynomial(this->size, result);
     }
-    if (this->size == 1)
-    {
-        double *temp = result.array;
-        result.array = this->array;
-        result.size = this->size;
-        delete[] temp;
-        result.array[0] *= number;
-        return result;
-    }
-    delete[] result.array;
-    result.array = new double[size];
-    for (int i = 0; i < this->size; i++)
-    {
-        result.array[i] = this->array[i] * number;
-    }
-    return result;
+    return Polynomial();
 }
 
 Polynomial Polynomial::operator*(const Polynomial &other)
@@ -347,23 +337,13 @@ Polynomial Polynomial::combine(const Polynomial &_other)
     if ((!is_zero()) && _other.size != 0)
     {
         Polynomial result(0, (this->size - 1) * (_other.size - 1));
-        for (int i = 0; i < this->size; i++)
-        {
-            result.array[i] = this->array[i];
-        }
         Polynomial other;
         other = _other;
-        Polynomial temp;
-        for (int i = 1; i < this->size; i++)
+        for (int i = this->size - 1; i >= 0; i--)
         {
-            // temp = other.pow(i);
-            // for (int i = 0; i < ; i++)
-            // {
-            //     /* code */
-            // }
-            
+            result += other.pow(i) * this->array[i];
         }
-
+        
         return result;
     }
     return *this;
