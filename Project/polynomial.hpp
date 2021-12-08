@@ -2,8 +2,6 @@
 #define POLYNOMIAL_HPP
 #include <iostream>
 
-using namespace std;
-
 const int MAX_SIZE = 9;
 
 class Polynomial
@@ -38,10 +36,10 @@ public:
     bool is_zero();                         //+
     double eval_by_Horner(const double &x); //+
 
-    string toString();       //+
-    string representation(); //+
+    std::string toString();       //+
+    std::string representation(); //+
 
-    class EmptyPolynomialException : public exception
+    class EmptyPolynomialException : public std::exception
     {
         const char *what() const throw()
         {

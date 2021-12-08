@@ -10,7 +10,7 @@ try
     Polynomial p2(3, arr2);
     Polynomial p3;
     p3 = p1.combine(p2);
-    cout << p3.representation() << endl;
+    std::cout << p3.representation() << std::endl;
 }
 catch(const std::exception& e)
 {

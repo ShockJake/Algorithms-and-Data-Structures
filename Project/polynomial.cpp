@@ -18,12 +18,12 @@ Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments
     array[number] = arg;
 }
 
-string Polynomial::toString()
+std::string Polynomial::toString()
 {
-    string result = "";
+    std::string result = "";
     for (int i = 0; i < size; i++)
     {
-        result += to_string(array[i]);
+        result += std::to_string(array[i]);
         if (i != size - 1)
         {
             result += ", ";
@@ -34,14 +34,14 @@ string Polynomial::toString()
     return result;
 }
 
-string Polynomial::representation()
+std::string Polynomial::representation()
 {
     if (is_zero())
     {
         throw EmptyPolynomialException();
     }
-    string result = "";
-    result += to_string((int)array[0]);
+    std::string result = "";
+    result += std::to_string((int)array[0]);
     for (int i = 1; i < size; i++)
     {
         if (array[i] == 0.0)
@@ -50,11 +50,11 @@ string Polynomial::representation()
         }
         if (i < 2)
         {
-            result += " + " + to_string((int)array[i]) + "x";
+            result += " + " + std::to_string((int)array[i]) + "x";
         }
         else
         {
-            result += " + " + to_string((int)array[i]) + "x^" + to_string(i);
+            result += " + " + std::to_string((int)array[i]) + "x^" + std::to_string(i);
         }
     }
     return result;
