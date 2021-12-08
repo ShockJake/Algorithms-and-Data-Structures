@@ -1,13 +1,13 @@
 #include "polynomial.hpp"
 #include <string>
 
-Polynomial::Polynomial()
+Polynomial::Polynomial()  // --- Basic constructor ---
 {
     this->array = {};
     this->size = 0;
 }
 
-Polynomial::Polynomial(double arg, int number)
+Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments --- 
 {
     this->size = number + 1;
     this->array = new double[number + 1];
