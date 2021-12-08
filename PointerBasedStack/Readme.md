@@ -1,4 +1,4 @@
-# Implemetetation of Stak using Array List
+# Implemetetation of Stak using Linked List
 
 - ### Compiling program:
 
@@ -20,38 +20,33 @@ $ ./main
 > main.exe
 ```
 
-## Class ArrayBasedStack
+## Class PointerBasedStack
 
-Class ArrayBasedStack is a class that represents a stack using ArrayList. And has such methods and constructors.
+Class PointerBasedStack is a class that represents a stack using LinkedList. And has such methods and constructors.
 
 ```c++
-    ArrayBasedStack();
-    ArrayBasedStack(int size);
+    PointerBasedStack(int max_size);
     void push(const T &element);
     T pop();
     T peek();
     bool isEmpty();
     int size();
     bool isFull();
+
+    std::string toString();
 ```
 
-## Class Array List
+## Class LinkedList
 
-Class Array List is a implentation of List class that uses array to store and operate the elements. Because of that it is usefull for storing and accessing data.
+Class Linked List is a implentation of List class that uses doubly linked list to store and operate the elements. Because of that it is usefull for manipulating data.
 
 - ### Constructors:
 
 ```C++
-ArrayBasedList(); // --- Basic constructor ---
+PointerBasedStack(int max_size); // --- Constructor with arguments ---
 ```
 
-> Basic constructor with no arguments, creates empty array list with reseved size of 0.
-
-```C++
-ArrayBasedList(int size); // --- Constructor with arguments ---
-```
-
-> Constructor with arguments, that creates empty array list with reserved size of given number.
+> Constructor with arguments, that creates empty stack with reserved size of given number.
 
 #### Parameters:
 
@@ -87,7 +82,7 @@ bool isFull();
 int size();
 ```
 
-> Returns size of array;
+> Returns size of stack;
 
 ---
 
@@ -112,5 +107,13 @@ T peek();
 ```
 
 > Returns a value of the element on the top of stack, without deleting it, uses retrieve() method.
+
+---
+
+```C++
+string toString();
+```
+
+> Returns string representation of Stack;
 
 ---
