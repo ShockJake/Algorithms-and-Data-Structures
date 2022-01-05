@@ -20,3 +20,6 @@ ArrayBasedStack/.vscode/tasks.json
 Project/.vscode/launch.json
 Project/.vscode/settings.json
 Project/.vscode/tasks.json
+Queue/.vscode/launch.json
+Queue/.vscode/settings.json
+Queue/.vscode/tasks.json
