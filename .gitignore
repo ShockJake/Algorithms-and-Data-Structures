@@ -23,3 +23,9 @@ Project/.vscode/tasks.json
 Queue/.vscode/launch.json
 Queue/.vscode/settings.json
 Queue/.vscode/tasks.json
+PointerBasedStack/.vscode/settings.json
+Tree/.vscode/c_cpp_properties.json
+Tree/.vscode/launch.json
+Tree/.vscode/settings.json
+Tree/.vscode/tasks.json
+Tree/AVL/main

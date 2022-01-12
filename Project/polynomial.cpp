@@ -83,6 +83,12 @@ bool Polynomial::operator!=(const Polynomial &other)
 
 Polynomial Polynomial::operator+(const Polynomial &other)
 {
+
+    if (other.blocked)
+    {
+        throw FullPolynomialException();
+    }
+
     Polynomial newPoly;
 
     if (other.size == 0)
@@ -110,11 +116,23 @@ Polynomial Polynomial::operator+(const Polynomial &other)
     {
         newPoly.array[i] += other.array[i];
     }
+
+    if (size > 9)
+    {
+        blocked = true;
+    }
+
     return newPoly;
 }
 
 Polynomial Polynomial::operator-(const Polynomial &other)
 {
+
+    if(other.blocked)
+    {
+        throw FullPolynomialException();
+    }
+
     Polynomial newPoly;
 
     if (other.size == 0)
@@ -157,10 +175,17 @@ Polynomial Polynomial::operator-(const Polynomial &other)
 
 Polynomial Polynomial::operator=(const Polynomial &other)
 {
+
     if (this == &other)
     {
         return *this;
     }
+
+    if (other.blocked)
+    {
+        throw FullPolynomialException();
+    }
+
     this->size = other.size;
     this->array = other.array;
 
@@ -175,6 +200,7 @@ Polynomial &Polynomial::operator+=(const Polynomial &right)
         this->size = right.size;
         return *this;
     }
+
     *this = this->operator+(right);
     return *this;
 }
@@ -208,6 +234,12 @@ Polynomial Polynomial::operator*(const int &number)
 
 Polynomial Polynomial::operator*(const Polynomial &other)
 {
+
+    if (other.blocked)
+    {
+        throw FullPolynomialException();
+    }
+
     Polynomial result;
     if (this->size == 0 || other.size == 0)
     {
@@ -264,7 +296,10 @@ Polynomial Polynomial::diff()
         }
         return Polynomial(size, array);
     }
-    return Polynomial(size, array);
+    else 
+    {
+        throw EmptyPolynomialException();
+    }
 }
 
 bool Polynomial::is_zero()
@@ -291,7 +326,10 @@ Polynomial Polynomial::integrate()
         }
         return Polynomial(size, array);
     }
-    return Polynomial(size, array);
+    else
+    {
+        throw EmptyPolynomialException();
+    }
 }
 
 double Polynomial::eval_by_Horner(const double &x)
@@ -333,8 +371,19 @@ int Polynomial::getSize()
 
 Polynomial Polynomial::combine(const Polynomial &_other)
 {
-    if ((!is_zero()) && _other.size != 0)
+    if (!is_zero())
     {
+        if (_other.size == 0)
+        {
+            Polynomial result(this->array[0], 1);
+            return result;
+        }
+
+        if (_other.blocked)
+        {
+            throw FullPolynomialException();
+        }
+
         Polynomial result(0, (this->size - 1) * (_other.size - 1));
         Polynomial other;
         other = _other;
@@ -345,5 +394,8 @@ Polynomial Polynomial::combine(const Polynomial &_other)
 
         return result;
     }
-    return *this;
+    else
+    {
+        throw EmptyPolynomialException();
+    }
 }

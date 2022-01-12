@@ -9,10 +9,10 @@ class Polynomial
 private:
     double *array;
     int size;
-
+    bool blocked = false;
 public:
     Polynomial(); //+
-    Polynomial(int size, double arr[] = {}) : size(size), array(arr){};
+    Polynomial(int size, double arr[] = {}) : size(size), array(arr){}; //+
     Polynomial(double arg, int number); //+
     ~Polynomial(){};
 
@@ -44,6 +44,14 @@ public:
         const char *what() const throw()
         {
             return "The polynomial equals 0";
+        }
+    };
+
+    class FullPolynomialException : public std::exception
+    {
+        const char *what() const throw()
+        {
+            return "The polynomial is to big";
         }
     };
 };
