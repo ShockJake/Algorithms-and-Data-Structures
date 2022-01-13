@@ -29,3 +29,7 @@ Tree/.vscode/launch.json
 Tree/.vscode/settings.json
 Tree/.vscode/tasks.json
 Tree/AVL/main
+HashTable/main
+HashTable/.vscode/launch.json
+HashTable/.vscode/settings.json
+HashTable/.vscode/tasks.json
