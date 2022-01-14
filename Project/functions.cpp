@@ -56,11 +56,46 @@ void startProgram()
     }
 }
 
+Polynomial createPoly(int &size)
+{
+    double *input_args = new double[size];
+    std::cout << "Write all arguments for each element of polynomial -\n";
+    for (int i = 0; i < size; i++)
+    {
+        std::cout << i + 1 << ": ";
+        std::cin >> input_args[i];
+    }
+    return Polynomial(size, input_args);
+}
+
 void userMode()
 {
     std::cout << std::string(40, '-') << "\n\n"
               << "\tUser mode...\n\n"
               << std::string(40, '-') << "\n";
+
+    std::cout << "\nNow you need to create a polynomial:\n";
+    int size_int;
+    std::string size_str;
+    while (true)
+    {
+        std::cout << "*** Write size of your first polynomial: ";
+        std::cin >> size_str;
+        try
+        {
+            if (check_number(size_str))
+            {
+                size_int = atoi(size_str.c_str());
+                Polynomial new_poly = createPoly(size_int);
+                std::cout << "Now you have such polynomial:\n";
+                std::cout << new_poly.representation() << "\n";
+            }
+        }
+        catch (const std::exception &e)
+        {
+            std::cout << e.what() << '\n';
+        }
+    }
 }
 
 void presentationMode()
@@ -92,4 +127,35 @@ void showInfo()
     {
         std::cerr << e.what() << '\n';
     }
+}
+
+bool check_number(std::string str)
+{
+    int n = 1;
+    if (str[0] == '-')
+    {
+        n++;
+        for (int i = 1; i < str.length(); i++)
+        {
+            if (isdigit(str[i]) == false)
+            {
+                n = n - 2;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < str.length(); i++)
+        {
+            if (isdigit(str[i]) == false)
+            {
+                n = n - 2;
+            }
+        }
+    }
+    if (n <= 0)
+    {
+        throw WrongInputException();
+    }
+    return true;
 }
