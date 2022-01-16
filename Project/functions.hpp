@@ -11,7 +11,7 @@ void presentationMode();
 // Mode that shows what you can do with polynomials with user input.
 void userMode();
 
-// Function to choose mode (presentation or user). 
+// Function to choose mode (presentation or user).
 void chooseMode(int mode);
 
 // Function to show information about use of program.
@@ -22,6 +22,20 @@ bool check_number(std::string str);
 
 // Function to create polynomial.
 Polynomial createPoly(int &size);
+
+// Series of test for different functions of polynomials.
+void testAdd(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testSub(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testMul(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testMulN(Polynomial &p1, Polynomial &result);
+void testEq(Polynomial &p1, Polynomial &p2);
+void testNEq(Polynomial &p1, Polynomial &p2);
+void testEval(Polynomial &p1, Polynomial &p2);
+void testExp(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testDiff(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testInt(Polynomial &p1, Polynomial &p2, Polynomial &result);
+void testComb(Polynomial &p1, Polynomial &p2, Polynomial &result);
+
 class CommandNotFoundException : std::exception
 {
 public:
@@ -40,4 +54,4 @@ public:
     }
 };
 
-#endif //FUNCTIONS_H
+#endif // FUNCTIONS_H

@@ -60,10 +60,19 @@ Polynomial createPoly(int &size)
 {
     double *input_args = new double[size];
     std::cout << "Write all arguments for each element of polynomial -\n";
+    std::string input;
     for (int i = 0; i < size; i++)
     {
         std::cout << i + 1 << ": ";
-        std::cin >> input_args[i];
+        std::cin >> input;
+        if (check_number(input))
+        {
+            input_args[i] = atof(input.c_str());
+        }
+        else
+        {
+            throw WrongInputException();
+        }
     }
     return Polynomial(size, input_args);
 }
@@ -90,6 +99,14 @@ void userMode()
                 std::cout << "Now you have such polynomial:\n";
                 std::cout << new_poly.representation() << "\n";
             }
+            else
+            {
+                throw WrongInputException();
+            }
+        }
+        catch (const WrongInputException &e)
+        {
+            std::cout << e.what() << '\n';
         }
         catch (const std::exception &e)
         {
@@ -103,6 +120,117 @@ void presentationMode()
     std::cout << std::string(40, '-') << "\n\n"
               << "\tPresentation mode...\n\n"
               << std::string(40, '-') << "\n";
+
+    double arr1[3] = {3.0, 2.0, 1.0};
+    double arr2[3] = {1.0, 2.0, 3.0};
+
+    Polynomial poly1(3, arr1);
+    Polynomial poly2(3, arr2);
+
+    Polynomial result;
+
+    std::cout << "In presentation mode we have two polynomials:\n";
+    std::cout << "1: " << poly1.representation() << '\n';
+    std::cout << "2: " << poly2.representation() << '\n';
+
+    testAdd(poly1, poly2, result);
+    testSub(poly1, poly2, result);
+    testMul(poly1, poly2, result);
+    testMulN(poly1, result);
+    testEq(poly1, poly2);
+    testNEq(poly1, poly2);
+    testEval(poly1, poly2);
+    testExp(poly1, poly2, result);
+    testDiff(poly1, poly2, result);
+    testInt(poly1, poly2, result);
+    testComb(poly1, poly2, result);
+}
+
+void testAdd(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    result = poly1 + poly2;
+    std::cout << "\n### ADDITION ###\n";
+    std::cout << result.representation();
+    std::cout << std::string(25, '-') << '\n';
+}
+
+void testSub(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    result = poly1 - poly2;
+    std::cout << "\n### SUBTRACTION ###\n";
+    std::cout << result.representation() << '\n';
+    std::cout << std::string(25, '-') << '\n';
+}
+
+void testMul(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    result = poly1 * poly2;
+    std::cout << "\n### MULTIPLICATION BY ANOTHER POLYNOMIAL ###\n";
+    std::cout << result.representation() << '\n';
+    std::cout << std::string(25, '-') << '\n';
+}
+
+void testMulN(Polynomial &poly1, Polynomial &result)
+{
+    result = poly1 * 4;
+    std::cout << "\n### MULTIPLICATION BY A NUMBER ###\n";
+    std::cout << result.representation() << '\n';
+    std::cout << std::string(25, '-') << '\n';
+}
+void testEq(Polynomial &poly1, Polynomial &poly2)
+{
+    std::cout << "\n### EQUATION TO ANOTHER POLYNOMIAL ###\n";
+    std::cout << (poly1 == poly2) << '\n';
+    std::cout << std::string(25, '-') << '\n';
+}
+void testNEq(Polynomial &poly1, Polynomial &poly2)
+{
+    std::cout << "\n### NOTEQUATION TO ANOTHER POLYNOMIAL ###\n";
+    std::cout << (poly1 != poly2) << '\n';
+    std::cout << std::string(25, '-') << '\n';
+}
+
+void testEval(Polynomial &poly1, Polynomial &poly2)
+{
+    std::cout << "\n### EVALUATING BY HORNER ALGORYTHM ###\n";
+    std::cout << poly1.eval_by_Horner(4) << "\t - first Polynomial\n";
+    std::cout << poly2.eval_by_Horner(4) << "\t - second Polynomial\n";
+    std::cout << std::string(25, '-') << '\n';
+}
+
+void testExp(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    std::cout << "\n### EXPONENTIATION ###\n";
+    result = poly1.pow(2);
+    std::cout << result.representation() << "\t - first Polynomial\n";
+    result = poly2.pow(2);
+    std::cout << result.representation() << "\t - second Polynomial\n";
+    std::cout << std::string(25, '-') << '\n';
+}
+void testDiff(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    std::cout << "\n### DIFFERENTIATION ###\n";
+    result = poly1.diff();
+    std::cout << result.representation() << "\t - first Polynomial\n";
+    result = poly2.diff();
+    std::cout << result.representation() << "\t - second Polynomial\n";
+    std::cout << std::string(25, '-') << '\n';
+}
+void testInt(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    std::cout << "\n### INTEGRATION ###\n";
+    result = poly1.integrate();
+    std::cout << result.representation() << "\t - first Polynomial\n";
+    result = poly2.integrate();
+    std::cout << result.representation() << "\t - second Polynomial\n";
+    std::cout << std::string(25, '-') << '\n';
+}
+void testComb(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
+{
+    std::cout << "\n### COMBINATION ###\n";
+    result = poly1.combine(poly2);
+    std::cout << result.representation() << " - first Polynomial with second Polynomial\n";
+    std::cout << std::string(25, '-') << '\n';
 }
 
 void showInfo()
@@ -137,6 +265,10 @@ bool check_number(std::string str)
         n++;
         for (int i = 1; i < str.length(); i++)
         {
+            if (str[i] == '.')
+            {
+                continue;
+            }
             if (isdigit(str[i]) == false)
             {
                 n = n - 2;
@@ -147,6 +279,10 @@ bool check_number(std::string str)
     {
         for (int i = 0; i < str.length(); i++)
         {
+            if (str[i] == '.')
+            {
+                continue;
+            }
             if (isdigit(str[i]) == false)
             {
                 n = n - 2;
@@ -155,7 +291,7 @@ bool check_number(std::string str)
     }
     if (n <= 0)
     {
-        throw WrongInputException();
+        return false;
     }
     return true;
 }

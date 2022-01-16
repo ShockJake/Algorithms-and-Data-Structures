@@ -1,13 +1,13 @@
 #include "polynomial.hpp"
 #include <string>
 
-Polynomial::Polynomial()  // --- Basic constructor ---
+Polynomial::Polynomial() // --- Basic constructor ---
 {
     this->array = {};
     this->size = 0;
 }
 
-Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments --- 
+Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments ---
 {
     this->size = number + 1;
     this->array = new double[number + 1];
@@ -84,11 +84,6 @@ bool Polynomial::operator!=(const Polynomial &other)
 Polynomial Polynomial::operator+(const Polynomial &other)
 {
 
-    if (other.blocked)
-    {
-        throw FullPolynomialException();
-    }
-
     Polynomial newPoly;
 
     if (other.size == 0)
@@ -117,9 +112,9 @@ Polynomial Polynomial::operator+(const Polynomial &other)
         newPoly.array[i] += other.array[i];
     }
 
-    if (size > 9)
+    if (newPoly.size > 9)
     {
-        blocked = true;
+        newPoly.blocked = true;
     }
 
     return newPoly;
@@ -127,11 +122,6 @@ Polynomial Polynomial::operator+(const Polynomial &other)
 
 Polynomial Polynomial::operator-(const Polynomial &other)
 {
-
-    if(other.blocked)
-    {
-        throw FullPolynomialException();
-    }
 
     Polynomial newPoly;
 
@@ -179,11 +169,6 @@ Polynomial Polynomial::operator=(const Polynomial &other)
     if (this == &other)
     {
         return *this;
-    }
-
-    if (other.blocked)
-    {
-        throw FullPolynomialException();
     }
 
     this->size = other.size;
@@ -235,11 +220,6 @@ Polynomial Polynomial::operator*(const int &number)
 Polynomial Polynomial::operator*(const Polynomial &other)
 {
 
-    if (other.blocked)
-    {
-        throw FullPolynomialException();
-    }
-
     Polynomial result;
     if (this->size == 0 || other.size == 0)
     {
@@ -287,16 +267,24 @@ Polynomial Polynomial::diff()
 {
     if (size != 0)
     {
-        array[0] += array[1];
-        array[1] = 0;
+        double *newArray = new double[size];
+
+        for (int i = 0; i < size; i++)
+        {
+            newArray[i] = array[i];
+        }
+
+        newArray[0] += newArray[1];
+        newArray[1] = 0;
         for (int i = 1; i < size - 1; i++)
         {
-            array[i] = (i + 1) * array[i + 1];
-            array[i + 1] = 0;
+            newArray[i] = (i + 1) * newArray[i + 1];
+            newArray[i + 1] = 0;
         }
-        return Polynomial(size, array);
+
+        return Polynomial(size, newArray);
     }
-    else 
+    else
     {
         throw EmptyPolynomialException();
     }
@@ -316,15 +304,13 @@ Polynomial Polynomial::integrate()
         {
             newArray[i] = array[i];
         }
-        delete[] array;
-        array = newArray;
         size++;
         for (int i = size; i > 0; i--)
         {
-            array[i] = array[i - 1] / (i + 1);
-            array[i - 1] = 0;
+            newArray[i] = newArray[i - 1] / (i + 1);
+            newArray[i - 1] = 0;
         }
-        return Polynomial(size, array);
+        return Polynomial(size, newArray);
     }
     else
     {
@@ -379,11 +365,6 @@ Polynomial Polynomial::combine(const Polynomial &_other)
             return result;
         }
 
-        if (_other.blocked)
-        {
-            throw FullPolynomialException();
-        }
-
         Polynomial result(0, (this->size - 1) * (_other.size - 1));
         Polynomial other;
         other = _other;
@@ -391,6 +372,7 @@ Polynomial Polynomial::combine(const Polynomial &_other)
         {
             result += other.pow(i) * this->array[i];
         }
+        result.array[0] = this->array[0];
 
         return result;
     }

@@ -2,18 +2,17 @@
 #define POLYNOMIAL_HPP
 #include <iostream>
 
-const int MAX_SIZE = 9;
-
 class Polynomial
 {
 private:
     double *array;
     int size;
     bool blocked = false;
+
 public:
-    Polynomial(); //+
+    Polynomial();                                                       //+
     Polynomial(int size, double arr[] = {}) : size(size), array(arr){}; //+
-    Polynomial(double arg, int number); //+
+    Polynomial(double arg, int number);                                 //+
     ~Polynomial(){};
 
     Polynomial operator+(const Polynomial &other);   //+
@@ -47,13 +46,6 @@ public:
         }
     };
 
-    class FullPolynomialException : public std::exception
-    {
-        const char *what() const throw()
-        {
-            return "The polynomial is to big";
-        }
-    };
 };
 
 #endif // POLYNOMIAL_HPP
