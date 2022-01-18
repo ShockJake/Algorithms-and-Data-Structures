@@ -43,7 +43,7 @@ std::string Polynomial::representation()
         throw EmptyPolynomialException();
     }
     std::string result = "";
-    result += std::to_string((int)array[0]);
+    result += std::to_string(array[0]);
     for (int i = 1; i < size; i++)
     {
         if (array[i] == 0.0)
@@ -52,11 +52,11 @@ std::string Polynomial::representation()
         }
         if (i < 2)
         {
-            result += " + " + std::to_string((int)array[i]) + "x";
+            result += " + " + std::to_string(array[i]) + "x";
         }
         else
         {
-            result += " + " + std::to_string((int)array[i]) + "x^" + std::to_string(i);
+            result += " + " + std::to_string(array[i]) + "x^" + std::to_string(i);
         }
     }
     return result;
