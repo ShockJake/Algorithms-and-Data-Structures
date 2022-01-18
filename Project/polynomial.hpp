@@ -7,7 +7,6 @@ class Polynomial
 private:
     double *array;
     int size;
-    bool blocked = false;
 
 public:
     Polynomial();                                                       //+

@@ -23,6 +23,7 @@ void chooseMode(int mode)
 
 void startProgram()
 {
+
     int operaion_int = 0;
     std::string operation_str;
 
@@ -84,20 +85,42 @@ void userMode()
               << std::string(40, '-') << "\n";
 
     std::cout << "\nNow you need to create a polynomial:\n";
-    int size_int;
-    std::string size_str;
+    int size_int_first;
+    std::string size_str_first;
+    int size_int_second;
+    std::string size_str_second;
     while (true)
     {
         std::cout << "*** Write size of your first polynomial: ";
-        std::cin >> size_str;
+        std::cin >> size_str_first;
+        std::cout << "*** Write size of your second polynomial: ";
+        std::cin >> size_str_second;
         try
         {
-            if (check_number(size_str))
+            if (check_number(size_str_first) && check_number(size_str_second))
             {
-                size_int = atoi(size_str.c_str());
-                Polynomial new_poly = createPoly(size_int);
-                std::cout << "Now you have such polynomial:\n";
-                std::cout << new_poly.representation() << "\n";
+                size_int_first = atoi(size_str_first.c_str());
+                size_int_second = atoi(size_str_second.c_str());
+                Polynomial poly1 = createPoly(size_int_first);
+                std::cout << "\n------------\n";
+                Polynomial poly2 = createPoly(size_int_second);
+                std::cout << "Now you have such polynomials:\n";
+                std::cout << poly1.representation() << " - first\n";
+                std::cout << poly2.representation() << " - second\n";
+
+                try
+                {
+                    userTest(poly1, poly2);
+                }
+                catch(const WrongInputException& e)
+                {
+                    std::cout << e.what() << '\n';
+                }
+                catch(const std::exception& e)
+                {
+                    std::cout << e.what() << '\n';
+                }
+                
             }
             else
             {
@@ -150,7 +173,7 @@ void testAdd(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
 {
     result = poly1 + poly2;
     std::cout << "\n### ADDITION ###\n";
-    std::cout << result.representation();
+    std::cout << result.representation() << '\n';
     std::cout << std::string(25, '-') << '\n';
 }
 
@@ -231,6 +254,70 @@ void testComb(Polynomial &poly1, Polynomial &poly2, Polynomial &result)
     result = poly1.combine(poly2);
     std::cout << result.representation() << " - first Polynomial with second Polynomial\n";
     std::cout << std::string(25, '-') << '\n';
+}
+
+void userTest(Polynomial &poly1, Polynomial &poly2)
+{
+    int operation_int;
+    std::string operation_str;
+    Polynomial result;
+    while (true)
+    {
+        std::cout << "What operation do you want to do:\n";
+        std::cout << "1)Add\n2)Substract\n3)Multiply\n4)Multiply by number\n"
+                  << "5)Exponentiate\n6)Differentiate\n7)Integrate\n8)Combinate\n"
+                  << "9)Evaluate by Horner algorythm\n10)Exit\n";
+        std::cin >> operation_str;
+
+        if (check_number(operation_str))
+        {
+            operation_int = atoi(operation_str.c_str());
+            if (operation_int == 1)
+            {
+                testAdd(poly1, poly2, result);
+            }
+            else if (operation_int == 2)
+            {
+                testSub(poly1, poly2, result);
+            }
+            else if (operation_int == 3)
+            {
+                testMul(poly1, poly2, result);
+            }
+            else if (operation_int == 4)
+            {
+                testMulN(poly1, result);
+            }
+            else if (operation_int == 5)
+            {
+                testExp(poly1, poly2, result);
+            }
+            else if (operation_int == 6)
+            {
+                testDiff(poly1, poly2, result);
+            }
+            else if (operation_int == 7)
+            {
+                testInt(poly1, poly2, result);
+            }
+            else if (operation_int == 8)
+            {
+                testComb(poly1, poly2, result);
+            }
+            else if (operation_int == 9)
+            {
+                testEval(poly1, poly2);
+            }
+            else if (operation_int == 10)
+            {
+                break;
+            }
+            else 
+            {
+                std::cout << "Wrong input try again...\n";
+            }
+        }
+    }
 }
 
 void showInfo()

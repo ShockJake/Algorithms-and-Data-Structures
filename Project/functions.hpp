@@ -23,6 +23,9 @@ bool check_number(std::string str);
 // Function to create polynomial.
 Polynomial createPoly(int &size);
 
+// Function to perform user test.
+void userTest(Polynomial &p1, Polynomial &p2);
+
 // Series of test for different functions of polynomials.
 void testAdd(Polynomial &p1, Polynomial &p2, Polynomial &result);
 void testSub(Polynomial &p1, Polynomial &p2, Polynomial &result);

@@ -1,13 +1,13 @@
 #include "polynomial.hpp"
 #include <string>
-
-Polynomial::Polynomial() // --- Basic constructor ---
+// Basic constructor
+Polynomial::Polynomial()
 {
-    this->array = {};
+    this->array = nullptr;
     this->size = 0;
 }
-
-Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments ---
+// Constructor with arguments
+Polynomial::Polynomial(double arg, int number)
 {
     this->size = number + 1;
     this->array = new double[number + 1];
@@ -18,6 +18,7 @@ Polynomial::Polynomial(double arg, int number) // --- Constructor with arguments
     array[number] = arg;
 }
 
+// Method to return an array with arguments of the each element of polynomial.
 std::string Polynomial::toString()
 {
     std::string result = "";
@@ -34,6 +35,7 @@ std::string Polynomial::toString()
     return result;
 }
 
+// Method to return a representation of polynomial.
 std::string Polynomial::representation()
 {
     if (is_zero())
@@ -110,11 +112,6 @@ Polynomial Polynomial::operator+(const Polynomial &other)
     for (int i = 0; i < other.size; i++)
     {
         newPoly.array[i] += other.array[i];
-    }
-
-    if (newPoly.size > 9)
-    {
-        newPoly.blocked = true;
     }
 
     return newPoly;
@@ -249,6 +246,7 @@ Polynomial Polynomial::operator*(const Polynomial &other)
     return result;
 }
 
+// Method to exponent the polynomial by a number;
 Polynomial Polynomial::pow(int n)
 {
     if (n == 0)
@@ -263,6 +261,7 @@ Polynomial Polynomial::pow(int n)
     return *this * pow(--n);
 }
 
+// Method to defferentiate th polynomial.
 Polynomial Polynomial::diff()
 {
     if (size != 0)
@@ -295,6 +294,7 @@ bool Polynomial::is_zero()
     return size == 0;
 }
 
+// Method to integrate polynomial.
 Polynomial Polynomial::integrate()
 {
     if (!is_zero())
@@ -310,6 +310,7 @@ Polynomial Polynomial::integrate()
             newArray[i] = newArray[i - 1] / (i + 1);
             newArray[i - 1] = 0;
         }
+
         return Polynomial(size, newArray);
     }
     else
@@ -318,6 +319,7 @@ Polynomial Polynomial::integrate()
     }
 }
 
+// Method to evaluate polynomial using horner algorithm.
 double Polynomial::eval_by_Horner(const double &x)
 {
     if (!is_zero())
@@ -335,6 +337,7 @@ double Polynomial::eval_by_Horner(const double &x)
     }
 }
 
+// Method to make a negative polynomial.
 void Polynomial::negation()
 {
     if (!is_zero())
@@ -355,6 +358,7 @@ int Polynomial::getSize()
     return size;
 }
 
+// Method to combine two polynomials into one.
 Polynomial Polynomial::combine(const Polynomial &_other)
 {
     if (!is_zero())
