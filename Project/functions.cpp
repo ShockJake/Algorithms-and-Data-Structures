@@ -327,7 +327,7 @@ void showInfo()
     std::fstream fs;
     try
     {
-        fs.open("info.doc", std::ios::in);
+        fs.open("info.txt", std::ios::in);
         if (fs.is_open())
         {
             std::string line;
