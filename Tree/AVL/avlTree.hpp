@@ -254,23 +254,29 @@ AVLTree<T>::Node<T> *AVLTree<T>::insert(Node<T> *node, const T &x)
     node->height = 1 + max(getHeight(node->left), getHeight(node->right));
     int balance = getBalance(node);
 
-    if (balance > 1 && x < node->left->element)
+    if (balance > 1)
     {
-        return rightRotate(node);
+        if (x < node->left->element)
+        {
+            return rightRotate(node);
+        }
+        else
+        {
+            node->left = leftRotate(node->left);
+            return rightRotate(node);
+        }
     }
-    if (balance > 1 && x > node->left->element)
+    if (balance < -1)
     {
-        node->left = leftRotate(node->left);
-        return rightRotate(node);
-    }
-    if (balance < -1 && x > node->left->element)
-    {
-        return leftRotate(node);
-    }
-    if (balance < -1 && x < node->right->element)
-    {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
+        if (x < node->right->element)
+        {
+            return leftRotate(node);
+        }
+        else
+        {
+            node->right = rightRotate(node->right);
+            return leftRotate(node);
+        }
     }
     return node;
 }
@@ -327,23 +333,29 @@ AVLTree<T>::Node<T> *AVLTree<T>::remove(Node<T> *node, const T &x)
     }
     node->height = 1 + max(getHeight(node->left), getHeight(node->right));
     int balance = getBalance(node);
-    if (balance > 1 && getBalance(node->left) >= 0)
+    if (balance > 1)
     {
-        return rightRotate(node);
+        if (x < node->left->element)
+        {
+            return rightRotate(node);
+        }
+        else
+        {
+            node->left = leftRotate(node->left);
+            return rightRotate(node);
+        }
     }
-    if (balance > 1 && getBalance(node->left) < 0)
+    if (balance < -1)
     {
-        root->left = leftRotate(node->left);
-        return rightRotate(node);
-    }
-    if (balance < -1 && getBalance(node->right) <= 0)
-    {
-        return leftRotate(node);
-    }
-    if (balance < -1 && getBalance(node->right) > 0)
-    {
-        node->right = rightRotate(node->right);
-        return leftRotate(node);
+        if (x < node->right->element)
+        {
+            return leftRotate(node);
+        }
+        else
+        {
+            node->right = rightRotate(node->right);
+            return leftRotate(node);
+        }
     }
     return node;
 }
