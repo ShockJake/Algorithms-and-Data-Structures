@@ -258,14 +258,14 @@ AVLTree<T>::Node<T> *AVLTree<T>::insert(Node<T> *node, const T &x)
     {
         return rightRotate(node);
     }
-    if (balance < -1 && x > node->left->element)
-    {
-        return leftRotate(node);
-    }
     if (balance > 1 && x > node->left->element)
     {
         node->left = leftRotate(node->left);
         return rightRotate(node);
+    }
+    if (balance < -1 && x > node->left->element)
+    {
+        return leftRotate(node);
     }
     if (balance < -1 && x < node->right->element)
     {
