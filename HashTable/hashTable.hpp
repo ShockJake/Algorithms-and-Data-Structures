@@ -3,12 +3,14 @@
 
 #include <iostream>
 
+// Maximum size if it's not specified
 const int HASH_TABLE_SIZE = 10;
 
 template <class T>
 class HashTable
 {
 private:
+    // Inner class for containing data
     template <class U>
     class Node
     {
@@ -23,8 +25,11 @@ private:
         }
     };
 
+    // Pointer to a pointers of different hash keys
     Node<T> **head;
+    // Given size
     int size;
+    // Real number of elements
     int real_size = 0;
 
 public:
@@ -47,6 +52,10 @@ public:
     void makeEmpty();
     // Print table.
     void printHashTable();
+    // Checking if the table is empty
+    bool isEmpty() const;
+    // Delete all nodes
+    void clear();
 
     class EmptyHashTableException : std::exception
     {
@@ -55,14 +64,10 @@ public:
             return "Hast Table is empty and not operable";
         }
     };
-
-private:
-    bool isEmpty() const;
-    void clear();
 };
 
 template <class T>
-HashTable<T>::HashTable(int size)
+HashTable<T>::HashTable(int size) // Constructor with arguments
 {
     head = new Node<T> *[size];
     this->size = size;
@@ -73,7 +78,7 @@ HashTable<T>::HashTable(int size)
 }
 
 template <class T>
-HashTable<T>::~HashTable()
+HashTable<T>::~HashTable() // Destructor
 {
     if (head != nullptr)
     {
@@ -195,7 +200,7 @@ bool HashTable<T>::remove(const T &x)
         Node<T> *node = head[index];
         if (node != nullptr)
         {
-            if(node->element == x)
+            if (node->element == x)
             {
                 Node<T> *toDelete = head[index];
                 head[index] = node->next;
