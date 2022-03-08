@@ -200,4 +200,10 @@ Set<T> Set<T>::popAll(const Set &other)
     }
 }
 
+template <class T>
+std::string Set<T>::toString()
+{
+    return data.toString();
+}
+
 #endif // SET_HPP
