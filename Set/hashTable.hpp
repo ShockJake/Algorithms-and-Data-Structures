@@ -2,12 +2,13 @@
 #define HASHTABLE_HPP
 
 #include <iostream>
-
+#include <typeinfo>
+#include "set.hpp"
 // Maximum size if it's not specified
-const int HASH_TABLE_SIZE = 10;
+const int HASH_SET_SIZE = 10;
 
 template <class T>
-class HashTable
+class HashSet : public Set<T>
 {
 private:
     // Inner class for containing data
@@ -28,15 +29,15 @@ private:
     // Pointer to a pointers of different hash keys
     Node<T> **head;
     // Given size
-    int size;
+    int reservedSize;
     // Real number of elements
-    int real_size = 0;
+    int realSize = 0;
 
 public:
     // Constructor with arguments
-    HashTable(int size = HASH_TABLE_SIZE);
+    HashSet(int size = HASH_SET_SIZE);
     // Destructor
-    ~HashTable();
+    ~HashSet();
 
     // Inserting element to the table.
     bool insert(const T &x);
@@ -56,23 +57,34 @@ public:
     bool isEmpty() const;
 
     // Make clone of HashTable
-    HashTable &clone();
+    HashSet &clone();
 
     // Pop all elements that appears in enother hashTable
-    void popAll(const HashTable &other);
+    void popAll(const HashSet &other);
 
-    int getSize();
-    class EmptyHashTableException : std::exception
+    int size();
+
+    HashSet makeUnion(HashSet &other);
+    HashSet makeIntersection(HashSet &other);
+    HashSet makeDifference(HashSet &other);
+
+    // Exception for already existing element
+    class ExistingElementException : std::exception
     {
         const char *what() const throw()
         {
-            return "Hast Table is empty and not operable";
+            return "Element already exists";
         }
     };
 
-    HashTable makeUnion(HashTable &other);
-    HashTable makeIntersection(HashTable &other);
-    HashTable makeDifference(HashTable &other);
+    // Exception for empty Set
+    class EmptySetException : std::exception
+    {
+        const char *what() const throw()
+        {
+            return "Set is empty and not operable";
+        }
+    };
 
 private:
     // Delete all nodes
@@ -80,10 +92,10 @@ private:
 };
 
 template <class T>
-HashTable<T>::HashTable(int size) // Constructor with arguments
+HashSet<T>::HashSet(int size) // Constructor with arguments
 {
     head = new Node<T> *[size];
-    this->size = size;
+    this->reservedSize = size;
     for (int i = 0; i < size; i++)
     {
         head[i] = nullptr;
@@ -91,7 +103,7 @@ HashTable<T>::HashTable(int size) // Constructor with arguments
 }
 
 template <class T>
-HashTable<T>::~HashTable() // Destructor
+HashSet<T>::~HashSet() // Destructor
 {
     if (head != nullptr)
     {
@@ -101,13 +113,13 @@ HashTable<T>::~HashTable() // Destructor
 }
 
 template <class T>
-bool HashTable<T>::isEmpty() const
+bool HashSet<T>::isEmpty() const
 {
-    return real_size == 0;
+    return realSize == 0;
 }
 
 template <class T>
-void HashTable<T>::clear()
+void HashSet<T>::clear()
 {
     if (!isEmpty())
     {
@@ -115,7 +127,7 @@ void HashTable<T>::clear()
         {
             if (head[i] != nullptr)
             {
-                real_size--;
+                realSize--;
                 delete[] head[i];
             }
         }
@@ -123,43 +135,65 @@ void HashTable<T>::clear()
 }
 
 template <class T>
-int HashTable<T>::hash(const T &x) const
+int HashSet<T>::hash(const T &x) const
 {
-    return x % size;
-}
-
-template <class T>
-int HashTable<T>::getSize()
-{
-    return this->size;
-}
-
-template <class T>
-bool HashTable<T>::insert(const T &x)
-{
-    int index = hash(x);
-    if (head[index] == nullptr)
+    if (typeid(T) == typeid(std::string))
     {
-        head[index] = new Node<T>(x);
-        real_size++;
-        return true;
+        return std::strlen(x) % reservedSize;
+    }
+    return x % reservedSize;
+}
+
+template <class T>
+int HashSet<T>::size()
+{
+    return this->reservedSize;
+}
+
+template <class T>
+bool HashSet<T>::insert(const T &x)
+{
+    if (realSize == reservedSize)
+    {
+        Node<T> *newHead = Node<T> *[this->reservedSize];
+        for (int i = 0; i < reservedSize; i++)
+        {
+            newHead[i] = this->head[i];
+        }
+        delete this->head;
+        this->head = newHead;
+        this->reservedSize += 2; 
+    }
+
+    if (!contains(x))
+    {
+        int index = hash(x);
+        if (head[index] == nullptr)
+        {
+            head[index] = new Node<T>(x);
+            realSize++;
+            return true;
+        }
+        else
+        {
+            Node<T> *newNode = head[index];
+            while (newNode->next != nullptr)
+            {
+                newNode = newNode->next;
+            }
+            newNode->next = new Node<T>(x);
+            realSize++;
+            return true;
+        }
     }
     else
     {
-        Node<T> *newNode = head[index];
-        while (newNode->next != nullptr)
-        {
-            newNode = newNode->next;
-        }
-        newNode->next = new Node<T>(x);
-        real_size++;
-        return true;
+        throw ExistingElementException();
     }
-    return false;
 }
 
 template <class T>
-void HashTable<T>::printHashTable()
+void HashSet<T>::printHashTable()
 {
     if (!isEmpty())
     {
@@ -180,12 +214,12 @@ void HashTable<T>::printHashTable()
     }
     else
     {
-        throw EmptyHashTableException();
+        throw EmptySetException();
     }
 }
 
 template <class T>
-bool HashTable<T>::contains(const T &x) const
+bool HashSet<T>::contains(const T &x) const
 {
     if (!isEmpty())
     {
@@ -206,12 +240,12 @@ bool HashTable<T>::contains(const T &x) const
     }
     else
     {
-        throw EmptyHashTableException();
+        throw EmptySetException();
     }
 }
 
 template <class T>
-bool HashTable<T>::remove(const T &x)
+bool HashSet<T>::remove(const T &x)
 {
     if (!isEmpty())
     {
@@ -224,7 +258,7 @@ bool HashTable<T>::remove(const T &x)
                 Node<T> *toDelete = head[index];
                 head[index] = node->next;
                 delete toDelete;
-                real_size--;
+                realSize--;
                 return true;
             }
             while (node->next != nullptr)
@@ -234,7 +268,7 @@ bool HashTable<T>::remove(const T &x)
                     Node<T> *toDelete = node->next;
                     node->next = node->next->next;
                     delete toDelete;
-                    real_size--;
+                    realSize--;
                     return true;
                 }
                 node = node->next;
@@ -244,12 +278,12 @@ bool HashTable<T>::remove(const T &x)
     }
     else
     {
-        throw EmptyHashTableException();
+        throw EmptySetException();
     }
 }
 
 template <class T>
-void HashTable<T>::makeEmpty()
+void HashSet<T>::makeEmpty()
 {
     if (!isEmpty())
     {
@@ -262,9 +296,9 @@ void HashTable<T>::makeEmpty()
 }
 
 template <class T>
-HashTable<T> &HashTable<T>::clone()
+HashSet<T> &HashSet<T>::clone()
 {
-    HashTable newHash = new HashTable(this.size);
+    HashSet newHash = new HashSet(this.size);
 
     for (int i = 0; i < size; i++)
     {
@@ -277,7 +311,7 @@ HashTable<T> &HashTable<T>::clone()
 }
 
 template <class T>
-void HashTable<T>::popAll(const HashTable &other)
+void HashSet<T>::popAll(const HashSet &other)
 {
     if (!other.isEmpty())
     {
@@ -286,25 +320,58 @@ void HashTable<T>::popAll(const HashTable &other)
             Node<T> node = other.head[i];
             while (node != nullptr)
             {
-                if(this.contains(node.element))
+                if (this.contains(node.element))
                 {
                     this->remove(node.element);
-                }   
+                }
                 node = node.next;
-            }   
+            }
         }
     }
 }
 
 template <class T>
-HashTable<T> HashTable<T>::makeUnion(HashTable &other)
+HashSet<T> HashSet<T>::makeUnion(HashSet &other)
 {
-    HashTable<T> newHash = new HashTable<T>(this->real_size + other.real_size);
-
-    for (int i = 0; i < count; i++)
+    if (this->isEmpty() && other.isEmpty())
     {
-        /* code */
+        return HashSet<T>();
     }
-    
+    if (this->isEmpty())
+    {
+        return other.clone();
+    }
+    if (other.isEmpty())
+    {
+        return this->clone();
+    }
+
+    int lenght = this->size() + other.size();
+
+    HashSet<T> newSet = new HashSet<T>(lenght);
+
+    Node<T> node = nullptr;
+
+    for (int i = 0; i < this->size(); i++)
+    {
+        node = this->head[i];
+        while (node != nullptr)
+        {
+            newSet.insert(node.element);
+            node = node.next;
+        }
+    }
+    for (int i = 0; i < other.size(); i++)
+    {
+        node = other.head[i];
+        while (node != nullptr)
+        {
+            newSet.insert(node.element);
+            node = node.next;
+        }
+    }
+
+    return newSet;
 }
+
 #endif // HASHTABLE_HPP
