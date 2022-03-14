@@ -40,33 +40,33 @@ public:
     ~HashSet();
 
     // Inserting element to the table.
-    bool insert(const T &x);
+    bool insert(const T &x) override;
     // Removing element from the table.
-    bool remove(const T &x);
+    bool remove(const T &x) override;
 
     // Checking if element with given value is in the table.
-    bool contains(const T &x) const;
+    bool contains(const T &x) override;
     // Returns key for the given value.
     int hash(const T &x) const;
 
     // Creating empty table.
-    void makeEmpty();
+    void makeEmpty() override;
     // Print table.
     void printHashTable();
     // Checking if the table is empty
-    bool isEmpty() const;
+    bool isEmpty() override;
 
     // Make clone of HashTable
     HashSet &clone();
 
     // Pop all elements that appears in enother hashTable
-    void popAll(const HashSet &other);
+    void popAll(Set<T> &other);
 
     int size();
 
-    HashSet makeUnion(HashSet &other);
-    HashSet makeIntersection(HashSet &other);
-    HashSet makeDifference(HashSet &other);
+    HashSet getUnion(Set<T> &other);
+    HashSet getIntersection(Set<T> &other);
+    HashSet getDifference(Set<T> &other);
 
     // Exception for already existing element
     class ExistingElementException : std::exception
@@ -113,7 +113,7 @@ HashSet<T>::~HashSet() // Destructor
 }
 
 template <class T>
-bool HashSet<T>::isEmpty() const
+bool HashSet<T>::isEmpty()
 {
     return realSize == 0;
 }
@@ -155,14 +155,14 @@ bool HashSet<T>::insert(const T &x)
 {
     if (realSize == reservedSize)
     {
-        Node<T> *newHead = Node<T> *[this->reservedSize];
+        Node<T> *newHead = Node<T> * [this->reservedSize];
         for (int i = 0; i < reservedSize; i++)
         {
             newHead[i] = this->head[i];
         }
         delete this->head;
         this->head = newHead;
-        this->reservedSize += 2; 
+        this->reservedSize += 2;
     }
 
     if (!contains(x))
@@ -219,7 +219,7 @@ void HashSet<T>::printHashTable()
 }
 
 template <class T>
-bool HashSet<T>::contains(const T &x) const
+bool HashSet<T>::contains(const T &x)
 {
     if (!isEmpty())
     {
@@ -311,7 +311,7 @@ HashSet<T> &HashSet<T>::clone()
 }
 
 template <class T>
-void HashSet<T>::popAll(const HashSet &other)
+void HashSet<T>::popAll(Set<T> &other)
 {
     if (!other.isEmpty())
     {
@@ -331,7 +331,7 @@ void HashSet<T>::popAll(const HashSet &other)
 }
 
 template <class T>
-HashSet<T> HashSet<T>::makeUnion(HashSet &other)
+HashSet<T> HashSet<T>::getUnion(Set<T> &other)
 {
     if (this->isEmpty() && other.isEmpty())
     {
@@ -372,6 +372,16 @@ HashSet<T> HashSet<T>::makeUnion(HashSet &other)
     }
 
     return newSet;
+}
+
+template <class T>
+HashSet<T> HashSet<T>::getIntersection(Set<T> &other)
+{
+}
+
+template <class T>
+HashSet<T> HashSet<T>::getDifference(Set<T> &other)
+{
 }
 
 #endif // HASHTABLE_HPP
