@@ -1,10 +1,7 @@
 #ifndef SET_HPP
 #define SET_HPP
 
-#include <string>
-#include "./HashTable/hashTable.hpp"
-
-#define MAX_SIZE 10
+#include "hashTable.hpp"
 
 template <class T>
 class Set
@@ -14,40 +11,42 @@ private:
 
 public:
     // Constructor
-    Set(int size = MAX_SIZE);
+    Set(int size = 10);
     // Destructor
     ~Set();
 
-    // Inserting element to a set
-    void insert(const T &element);
-    // Getting and removing element from the set
-    T remove(const T &element);
-
-    // Checking if the set is Empty
+    // Function to insert element into a Set
+    bool insert(const T &element);
+    // Function to remove element from a Set
+    bool remove(const T &element);
+    // Function to get size
+    int size();
+    // Function to check if Set contains an element
+    bool contains(const T &element);
+    // Function to check if Set is empty
     bool isEmpty();
-    // Checking if the fiven element appears in the set
-    bool isMember(const T &element) const;
-
-    // Delete all elements
-    void clear();
-    // Remove all elements
+    // Function to clear all elements
     void makeEmpty();
-    // Assignment operator
-    Set operator=(const Set &other);
 
-    // Get a set of common elements
-    Set getIntersection(const Set &other);
-    // Get a set of all elements form all elements from two sets
-    Set getUnion(const Set &other);
-    // Get a set of elements that does not appear in other set
-    Set getDifference(const Set &other);
-    // Removes all elements in fisrt set that equal to elements of second set
-    Set popAll(const Set &other);
+    // Function to create union of two sets
+    Set getUnion(Set &other);
+    // Function to create intersection of two sets
+    Set getIntersection(Set &other);
+    // Function to create difference of two sets
+    Set getDifference(Set &other);
+    // Function to pop all elements form other Set
+    void popAll(Set &other);
 
-    // Display set
-    std::string toString();
+    // Exception for already existing element
+    class ExistingElementException : std::exception
+    {
+        const char *what() const throw()
+        {
+            return "Element already exists";
+        }
+    };
 
-    // Exception for empty set
+    // Exception for empty Set
     class EmptySetException : std::exception
     {
         const char *what() const throw()
@@ -55,40 +54,50 @@ public:
             return "Set is empty and not operable";
         }
     };
-
-    // Exception for already existing element
-    class ExistingElementException : std::exception
-    {
-        const char *what() const throw()
-        {
-            return "The element is already exists in set";
-        }
-    };
-
-    class NotFoundException : std::exception
-    {
-        const char *what() const throw()
-        {
-            return "Element not found";
-        }
-    };
-
-private:
-    Set makeIntersection(const Set &other);
-    Set makeUnion(const Set &other);
-    Set makeDifference(const Set &other);
 };
 
 template <class T>
-Set<T>::Set(int size)
+Set<T>::Set(int size = 10)
 {
-    data = new HashTable<T>(size);
+    this.data = new HashTable(size);
 }
 
 template <class T>
 Set<T>::~Set()
 {
-    data.~HashTable();
+    this.data.~HashTable();
+}
+
+template <class T>
+bool Set<T>::contains(const T &element)
+{
+    return this.data.contains(element);
+}
+
+template <class T>
+int Set<T>::size()
+{
+    return this.data.real_size;
+}
+
+template <class T>
+bool Set<T>::insert(const T &element)
+{
+    if (!isEmpty())
+    {
+        if (!this->data.contains(element))
+        {
+            return data.insert(element);
+        }
+        else
+        {
+            throw ExistingElementException();
+        }
+    }
+    else
+    {
+        throw EmptySetException();
+    }
 }
 
 template <class T>
@@ -98,112 +107,53 @@ bool Set<T>::isEmpty()
 }
 
 template <class T>
-bool Set<T>::isMember(const T &element) const
+bool Set<T>::contains(const T &element)
 {
-    return data.contains(element);
-}
-
-template <class T>
-void Set<T>::insert(const T &element)
-{
-    if (!isMember(element))
+    if (!isEmpty())
     {
-        data.insert(element);
+        return data.contains(element);
     }
     else
     {
-        throw ExistingElementException();
+        throw EmptySetException();
     }
-}
-
-template <class T>
-T Set<T>::remove(const T &element)
-{
-    if (isMember(element))
-    {
-        data.remove(element);
-    }
-    else
-    {
-        throw NotFoundException();
-    }
-}
-
-template <class T>
-void Set<T>::clear()
-{
-    data.clear();
 }
 
 template <class T>
 void Set<T>::makeEmpty()
 {
-    data.makeEmpty();
-}
-
-template <class T>
-Set<T> Set<T>::operator=(const Set &other)
-{
-    if (this == &other)
+    if (!isEmpty())
     {
-        
-        
-        
-    }
-    
-}
-
-template <class T>
-Set<T> Set<T>::getIntersection(const Set &other)
-{
-    if (!(this->isEmpty() && other.isEmpty()))
-    {
-        return makeIntersection(other);
+        data.makeEmpty();
     }
     else
     {
-        return Set();
+        throw EmptySetException();
     }
 }
 
 template <class T>
-Set<T> Set<T>::getUnion(const Set &other)
+bool Set<T>::remove(const T &element)
 {
-    if (!(this->isEmpty() && other.isEmpty()))
+    if (!isEmpty())
     {
-        return makeUnion(other);
+        return data.remove(element);
     }
     else
     {
-        return Set();
+        throw EmptySetException();
     }
 }
 
 template <class T>
-Set<T> Set<T>::getDifference(const Set &other)
+void Set<T>::popAll(Set &other)
 {
-    if (!(this->isEmpty() && other.isEmpty()))
+    if(!other.isEmpty())
     {
-        return makeDifference(other);
-    }
-    else
-    {
-        return Set();
+        data.popAll(other.data);
     }
 }
 
-template <class T>
-Set<T> Set<T>::popAll(const Set &other)
-{
-    if (!other.isEmpty())
-    {
-    }
-}
 
-template <class T>
-std::string Set<T>::toString()
-{
-    return data.toString();
-}
 
 #endif // SET_HPP

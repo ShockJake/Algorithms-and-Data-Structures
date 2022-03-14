@@ -13,7 +13,7 @@ void testTwoSets(Set<T> &fistSet, Set<T> &secondSet);
 
 // Function to create a set of given type
 template <class T>
-Set<T> &createSet(const char *type, int size, const char *args[]);
+Set<T> createSet(const char *type, int size, const char *args[]);
 
 // Function to fill set with elements
 template <class T>
@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
 
     if (isOneSet)
     {
-
+        
         testOneSet(createSet(argv[1], argc, argv));
     }
 
@@ -54,31 +54,31 @@ void fillSet(Set<T> &set, int size, const char *args[], std::string type)
 }
 
 template <class T>
-Set<T> &createSet(const char *type, int size, const char *args[])
+Set<T> createSet(const char *type, int size, const char *args[])
 {
     if (type == "string")
     {
         Set<std::string> newSet = new Set<std::string>(size);
         fillSet(newSet, size, args, type);
-        return &newSet;
+        return newSet;
     }
     if (type == "integer")
     {
         Set<int> newSet = new Set<int>(size);
         fillSet(newSet, size, args, type);
-        return &newSet;
+        return newSet;
     }
     if (type == "float")
     {
         Set<float> newSet = new Set<float>(size);
         fillSet(newSet, size, args, type);
-        return &newSet;
+        return newSet;
     }
     if (type == "double")
     {
         Set<double> newSet = new Set<double>(size);
         fillSet(newSet, size, args, type);
-        return &newSet;
+        return newSet;
     }
 }
 

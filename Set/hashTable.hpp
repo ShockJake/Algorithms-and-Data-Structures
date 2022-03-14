@@ -56,8 +56,11 @@ public:
     bool isEmpty() const;
 
     // Make clone of HashTable
-    HashTable clone();
-    
+    HashTable &clone();
+
+    // Pop all elements that appears in enother hashTable
+    void popAll(const HashTable &other);
+
     int getSize();
     class EmptyHashTableException : std::exception
     {
@@ -66,6 +69,10 @@ public:
             return "Hast Table is empty and not operable";
         }
     };
+
+    HashTable makeUnion(HashTable &other);
+    HashTable makeIntersection(HashTable &other);
+    HashTable makeDifference(HashTable &other);
 
 private:
     // Delete all nodes
@@ -254,4 +261,50 @@ void HashTable<T>::makeEmpty()
     }
 }
 
+template <class T>
+HashTable<T> &HashTable<T>::clone()
+{
+    HashTable newHash = new HashTable(this.size);
+
+    for (int i = 0; i < size; i++)
+    {
+        for (Node<T> node : head[i])
+        {
+            newHash.insert(node.element);
+        }
+    }
+    return &newHash;
+}
+
+template <class T>
+void HashTable<T>::popAll(const HashTable &other)
+{
+    if (!other.isEmpty())
+    {
+        for (int i = 0; i < other.size(); i++)
+        {
+            Node<T> node = other.head[i];
+            while (node != nullptr)
+            {
+                if(this.contains(node.element))
+                {
+                    this->remove(node.element);
+                }   
+                node = node.next;
+            }   
+        }
+    }
+}
+
+template <class T>
+HashTable<T> HashTable<T>::makeUnion(HashTable &other)
+{
+    HashTable<T> newHash = new HashTable<T>(this->real_size + other.real_size);
+
+    for (int i = 0; i < count; i++)
+    {
+        /* code */
+    }
+    
+}
 #endif // HASHTABLE_HPP
