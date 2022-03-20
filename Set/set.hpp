@@ -17,15 +17,6 @@ public:
     virtual bool isEmpty() = 0;
     // Function to clear all elements
     virtual void makeEmpty() = 0;
-
-    // // Function to create union of two sets
-    // virtual Set getUnion(Set &other) = 0;
-    // // Function to create intersection of two sets
-    // virtual Set getIntersection(Set &other) = 0;
-    // // Function to create difference of two sets
-    // virtual Set getDifference(Set &other) = 0;
-    // // Function to pop all elements form other Set
-    // virtual void popAll(Set &other) = 0;
 };
 
 #endif // SET_HPP

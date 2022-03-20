@@ -3,7 +3,10 @@
 
 #include <iostream>
 #include <typeinfo>
+#include <cstring>
+#include <string>
 #include "set.hpp"
+
 // Maximum size if it's not specified
 const int HASH_SET_SIZE = 10;
 
@@ -48,25 +51,32 @@ public:
     bool contains(const T &x) override;
     // Returns key for the given value.
     int hash(const T &x) const;
+    // Returns key for the given string.
+    int hash(const std::string &x) const;
+
+    // Asignment operator
+    HashSet &operator=(const HashSet &other);
+
+    // Clone
+    HashSet clone();
 
     // Creating empty table.
     void makeEmpty() override;
     // Print table.
-    void printHashTable();
+    void printHashSet();
     // Checking if the table is empty
     bool isEmpty() override;
 
-    // Make clone of HashTable
-    HashSet &clone();
-
     // Pop all elements that appears in enother hashTable
-    void popAll(Set<T> &other);
+    void popAll(HashSet<T> &other);
 
     int size();
 
-    HashSet getUnion(Set<T> &other);
-    HashSet getIntersection(Set<T> &other);
-    HashSet getDifference(Set<T> &other);
+    std::string toString();
+
+    std::string printUnion(HashSet<T> &other);
+    std::string printIntersection(HashSet<T> &other);
+    std::string printDifference(HashSet<T> &other);
 
     // Exception for already existing element
     class ExistingElementException : std::exception
@@ -102,6 +112,11 @@ HashSet<T>::HashSet(int size) // Constructor with arguments
     }
 }
 
+std::string to_string(std::string data)
+{
+    return data;
+}
+
 template <class T>
 HashSet<T>::~HashSet() // Destructor
 {
@@ -123,7 +138,7 @@ void HashSet<T>::clear()
 {
     if (!isEmpty())
     {
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < reservedSize; i++)
         {
             if (head[i] != nullptr)
             {
@@ -135,12 +150,14 @@ void HashSet<T>::clear()
 }
 
 template <class T>
+int HashSet<T>::hash(const std::string &x) const
+{
+    return strlen(x.c_str()) % reservedSize;
+}
+
+template <class T>
 int HashSet<T>::hash(const T &x) const
 {
-    if (typeid(T) == typeid(std::string))
-    {
-        return std::strlen(x) % reservedSize;
-    }
     return x % reservedSize;
 }
 
@@ -155,17 +172,10 @@ bool HashSet<T>::insert(const T &x)
 {
     if (realSize == reservedSize)
     {
-        Node<T> *newHead = Node<T> * [this->reservedSize];
-        for (int i = 0; i < reservedSize; i++)
-        {
-            newHead[i] = this->head[i];
-        }
-        delete this->head;
-        this->head = newHead;
-        this->reservedSize += 2;
+        return false;
     }
 
-    if (!contains(x))
+    if (realSize == 0)
     {
         int index = hash(x);
         if (head[index] == nullptr)
@@ -188,16 +198,40 @@ bool HashSet<T>::insert(const T &x)
     }
     else
     {
-        throw ExistingElementException();
+        if (!contains(x))
+        {
+            int index = hash(x);
+            if (head[index] == nullptr)
+            {
+                head[index] = new Node<T>(x);
+                realSize++;
+                return true;
+            }
+            else
+            {
+                Node<T> *newNode = head[index];
+                while (newNode->next != nullptr)
+                {
+                    newNode = newNode->next;
+                }
+                newNode->next = new Node<T>(x);
+                realSize++;
+                return true;
+            }
+        }
+        else
+        {
+            throw ExistingElementException();
+        }
     }
 }
 
 template <class T>
-void HashSet<T>::printHashTable()
+void HashSet<T>::printHashSet()
 {
     if (!isEmpty())
     {
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < reservedSize; i++)
         {
             if (head[i] != nullptr)
             {
@@ -216,6 +250,39 @@ void HashSet<T>::printHashTable()
     {
         throw EmptySetException();
     }
+}
+
+template <class T>
+HashSet<T> &HashSet<T>::operator=(const HashSet<T> &other)
+{
+    Node<T> *node = nullptr;
+    for (int i = 0; i < other.reservedSize; i++)
+    {
+        node = other.head[i];
+        while (node != nullptr)
+        {
+            this->insert(node->element);
+            node = node->next;
+        }
+    }
+    return *this;
+}
+
+template <class T>
+HashSet<T> HashSet<T>::clone()
+{
+    HashSet<T> newSet(this->reservedSize);
+    Node<T> *node = nullptr;
+    for (int i = 0; i < this->reservedSize; i++)
+    {
+        node = this->head[i];
+        while (node != nullptr)
+        {
+            newSet.insert(node->element);
+        }
+        node = node->next;
+    }
+    return newSet;
 }
 
 template <class T>
@@ -288,7 +355,7 @@ void HashSet<T>::makeEmpty()
     if (!isEmpty())
     {
         clear();
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < reservedSize; i++)
         {
             head[i] = nullptr;
         }
@@ -296,69 +363,73 @@ void HashSet<T>::makeEmpty()
 }
 
 template <class T>
-HashSet<T> &HashSet<T>::clone()
+std::string HashSet<T>::toString()
 {
-    HashSet newHash = new HashSet(this.size);
-
-    for (int i = 0; i < size; i++)
+    std::string result = "";
+    Node<T> *node = nullptr;
+    for (int i = 0; i < reservedSize; i++)
     {
-        for (Node<T> node : head[i])
+        node = head[i];
+        while (node != nullptr)
         {
-            newHash.insert(node.element);
+            result += std::to_string(node->element) + ' ';
+            node = node->next;
         }
     }
-    return &newHash;
+
+    return result;
 }
 
 template <class T>
-void HashSet<T>::popAll(Set<T> &other)
+void HashSet<T>::popAll(HashSet<T> &other)
 {
     if (!other.isEmpty())
     {
         for (int i = 0; i < other.size(); i++)
         {
-            Node<T> node = other.head[i];
+            Node<T> *node = other.head[i];
             while (node != nullptr)
             {
-                if (this.contains(node.element))
+                if (this->contains(node->element))
                 {
-                    this->remove(node.element);
+                    this->remove(node->element);
                 }
-                node = node.next;
+                node = node->next;
             }
         }
     }
 }
 
 template <class T>
-HashSet<T> HashSet<T>::getUnion(Set<T> &other)
+std::string HashSet<T>::printUnion(HashSet<T> &other)
 {
     if (this->isEmpty() && other.isEmpty())
     {
-        return HashSet<T>();
+        return HashSet<T>().toString();
     }
     if (this->isEmpty())
     {
-        return other.clone();
+
+        return this->toString();
     }
     if (other.isEmpty())
     {
-        return this->clone();
+        return other.toString();
     }
 
     int lenght = this->size() + other.size();
 
-    HashSet<T> newSet = new HashSet<T>(lenght);
+    HashSet<T> newSet(lenght);
 
-    Node<T> node = nullptr;
+    Node<T> *node = nullptr;
 
-    for (int i = 0; i < this->size(); i++)
+    for (int i = 0; i < this->reservedSize; i++)
     {
         node = this->head[i];
         while (node != nullptr)
         {
-            newSet.insert(node.element);
-            node = node.next;
+            newSet.insert(node->element);
+            node = node->next;
         }
     }
     for (int i = 0; i < other.size(); i++)
@@ -366,22 +437,97 @@ HashSet<T> HashSet<T>::getUnion(Set<T> &other)
         node = other.head[i];
         while (node != nullptr)
         {
-            newSet.insert(node.element);
-            node = node.next;
+            if (!newSet.contains(node->element))
+            {
+                newSet.insert(node->element);
+            }
+            node = node->next;
+        }
+    }
+    return newSet.toString();
+}
+
+template <class T>
+std::string HashSet<T>::printIntersection(HashSet<T> &other)
+{
+    if (this->isEmpty() || other.isEmpty())
+    {
+        return HashSet<T>().toString();
+    }
+
+    HashSet<T> intersection(this->size());
+    Node<T> *node = nullptr;
+
+    if (this->size() >= other.size())
+    {
+        for (int i = 0; i < this->reservedSize; i++)
+        {
+            node = this->head[i];
+            while (node != nullptr)
+            {
+                if (other.contains(node->element))
+                {
+                    intersection.insert(node->element);
+                }
+                node = node->next;
+            }
+        }
+    }
+    else
+    {
+        for (int i = 0; i < other.reservedSize; i++)
+        {
+            node = other.head[i];
+            while (node != nullptr)
+            {
+                if (this->contains(node->element))
+                {
+                    intersection.insert(node->element);
+                }
+                node = node->next;
+            }
         }
     }
 
-    return newSet;
+    return intersection.toString();
 }
 
 template <class T>
-HashSet<T> HashSet<T>::getIntersection(Set<T> &other)
+std::string HashSet<T>::printDifference(HashSet<T> &other)
 {
-}
+    if (this->isEmpty() || other.isEmpty())
+    {
+        return HashSet<T>().toString();
+    }
 
-template <class T>
-HashSet<T> HashSet<T>::getDifference(Set<T> &other)
-{
+    HashSet<T> difference(this->size());
+    Node<T> *node = nullptr;
+
+    for (int i = 0; i < this->reservedSize; i++)
+    {
+        node = this->head[i];
+        while (node != nullptr)
+        {
+            if (!other.contains(node->element))
+            {
+                difference.insert(node->element);
+            }
+            node = node->next;
+        }
+    }
+    for (int i = 0; i < other.reservedSize; i++)
+    {
+        node = other.head[i];
+        while (node != nullptr)
+        {
+            if (!this->contains(node->element))
+            {
+                difference.insert(node->element);
+            }
+            node = node->next;
+        }
+    }
+    return difference.toString();
 }
 
 #endif // HASHTABLE_HPP
