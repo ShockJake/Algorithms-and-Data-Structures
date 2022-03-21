@@ -7,6 +7,8 @@
 #include <string>
 #include "set.hpp"
 
+using namespace std;
+
 // Maximum size if it's not specified
 const int HASH_SET_SIZE = 10;
 
@@ -51,8 +53,6 @@ public:
     bool contains(const T &x) override;
     // Returns key for the given value.
     int hash(const T &x) const;
-    // Returns key for the given string.
-    int hash(const std::string &x) const;
 
     // Asignment operator
     HashSet &operator=(const HashSet &other);
@@ -101,6 +101,16 @@ private:
     void clear();
 };
 
+int newHash(std::string x)
+{
+   return strlen(x.c_str());
+}
+
+int newHash(int x)
+{
+   return x;
+}
+
 template <class T>
 HashSet<T>::HashSet(int size) // Constructor with arguments
 {
@@ -112,9 +122,9 @@ HashSet<T>::HashSet(int size) // Constructor with arguments
     }
 }
 
-std::string to_string(std::string data)
+inline std::string to_string(std::string str)
 {
-    return data;
+    return str;
 }
 
 template <class T>
@@ -150,14 +160,14 @@ void HashSet<T>::clear()
 }
 
 template <class T>
-int HashSet<T>::hash(const std::string &x) const
+int HashSet<T>::hash(const T &element) const
 {
-    return strlen(x.c_str()) % reservedSize;
-}
+    int x = newHash(element);
 
-template <class T>
-int HashSet<T>::hash(const T &x) const
-{
+    if (x < 0)
+    {
+        x *= -1;
+    }
     return x % reservedSize;
 }
 
@@ -221,7 +231,7 @@ bool HashSet<T>::insert(const T &x)
         }
         else
         {
-            throw ExistingElementException();
+            return false;
         }
     }
 }
@@ -372,7 +382,7 @@ std::string HashSet<T>::toString()
         node = head[i];
         while (node != nullptr)
         {
-            result += std::to_string(node->element) + ' ';
+            result += to_string(node->element) + ' ';
             node = node->next;
         }
     }
