@@ -44,21 +44,18 @@ public:
     // Destructor
     ~HashSet();
 
-    // Inserting element to the table.
+    // Inserting element to the set.
     bool insert(const T &x) override;
-    // Removing element from the table.
+    // Removing element from the set.
     bool remove(const T &x) override;
 
-    // Checking if element with given value is in the table.
+    // Checking if element with given value is in the set.
     bool contains(const T &x) override;
     // Returns key for the given value.
     int hash(const T &x) const;
 
     // Asignment operator
     HashSet &operator=(const HashSet &other);
-
-    // Clone
-    HashSet clone();
 
     // Creating empty table.
     void makeEmpty() override;
@@ -67,7 +64,7 @@ public:
     // Checking if the table is empty
     bool isEmpty() override;
 
-    // Pop all elements that appears in enother hashTable
+    // Pop all elements that appears in enother hashSet
     void popAll(HashSet<T> &other);
 
     int size();
@@ -276,23 +273,6 @@ HashSet<T> &HashSet<T>::operator=(const HashSet<T> &other)
         }
     }
     return *this;
-}
-
-template <class T>
-HashSet<T> HashSet<T>::clone()
-{
-    HashSet<T> newSet(this->reservedSize);
-    Node<T> *node = nullptr;
-    for (int i = 0; i < this->reservedSize; i++)
-    {
-        node = this->head[i];
-        while (node != nullptr)
-        {
-            newSet.insert(node->element);
-        }
-        node = node->next;
-    }
-    return newSet;
 }
 
 template <class T>
