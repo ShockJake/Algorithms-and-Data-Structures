@@ -50,7 +50,6 @@ public:
 private:
     int left(int i) { return 2 * i; }
     int right(int i) { return 2 * i + 1; }
-    int parrent(int i) { return floor(i / 2); }
 };
 
 template <class T>
@@ -101,13 +100,13 @@ std::string PriorityQueue<T>::toString()
 template <class T>
 void PriorityQueue<T>::heapify(int i)
 {
-    int l = i * 2;
-    int r = i * 2 + 1;
+    int l = left(i);
+    int r = right(i);
     int lg = i;
 
     if (l < this->_size && r <= this->_size)
     {
-        if(r == this->_size)
+        if (r == this->_size)
         {
             r--;
         }
@@ -146,7 +145,7 @@ void PriorityQueue<T>::insertElement(Element<T, int> e)
 template <class T>
 Element<T, int> PriorityQueue<T>::pop()
 {
-    if(this->_size == 0)
+    if (this->_size == 0)
     {
         throw EmptyQueueException();
     }
@@ -155,7 +154,7 @@ Element<T, int> PriorityQueue<T>::pop()
     data[0] = data->back();
     data->pop_back();
     heapify(0);
-
+    _size--;
     return result;
 }
 
