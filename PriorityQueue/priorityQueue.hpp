@@ -4,7 +4,6 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <cmath>
 
 using namespace std;
 
@@ -47,6 +46,14 @@ public:
         }
     };
 
+    class LackOfElementException : std::exception
+    {
+        const char *what() const throw()
+        {
+            return "There is no such element in the queue";
+        }
+    };
+
 private:
     int left(int i) { return 2 * i; }
     int right(int i) { return 2 * i + 1; }
@@ -68,6 +75,13 @@ template <class T>
 int PriorityQueue<T>::getSize()
 {
     return data->size();
+}
+
+template <class T>
+int PriorityQueue<T>::getMaxPriority()
+{
+    Element<T, int> el = data.at(0);
+    return el.second;
 }
 
 inline std::string to_string(std::string _Val)
@@ -140,6 +154,28 @@ void PriorityQueue<T>::insertElement(Element<T, int> e)
     {
         heapify(i);
     }
+}
+
+template <class T>
+void PriorityQueue<T>::increasePriority(Element<T, int> e, int priority)
+{
+    Element<T, int> innerEl;
+    for (int i = 0; i < data->size(); i++)
+    {
+        innerEl = data.at(i);
+        if (innerEl.first == e.first && innerEl.second == e.second)
+        {
+            if (priority < innerEl.second)
+            {
+                std::cout << "New priority is smaller that current\n";
+            }
+
+            innerEl.second = priority;
+            heapify(0);
+            return;
+        }
+    }
+    throw LackOfElementException();
 }
 
 template <class T>
