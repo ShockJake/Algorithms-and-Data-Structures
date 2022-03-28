@@ -68,7 +68,7 @@ PriorityQueue();
 - ### Public methods
 
 ```C++
-    void insertElement(Element<T, int> e);
+void insertElement(Element<T, int> e);
 ```
 
 > Inserts element to the queue, calculating priorities of all objects
@@ -81,7 +81,7 @@ e - object of Element class that needs to be inserted.
 ---
 
 ```C++
-    int getMaxPriority();
+int getMaxPriority();
 ```
 
 > Getting the highest priority in queue.
@@ -89,7 +89,7 @@ e - object of Element class that needs to be inserted.
 ---
 
 ```C++
-    Element<T, int> pop();
+Element<T, int> pop();
 ```
 
 > Dequeueing element with the highest priority from the queue.
@@ -97,7 +97,7 @@ e - object of Element class that needs to be inserted.
 ---
 
 ```C++
-    void increasePriority(Element<T, int> e, int priority);
+void increasePriority(Element<T, int> e, int priority);
 ```
 
 > Checks if element exists in queue and increases it's priority.
@@ -105,7 +105,7 @@ e - object of Element class that needs to be inserted.
 ---
 
 ```C++
-    int getSize();
+int getSize();
 ```
 
 > Getting size of queue.
