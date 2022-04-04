@@ -22,7 +22,7 @@ $: ./main graph_file.csv
 
 ## Class MatrixGraph
 
-Class MatrixGraph is a class that represents a hash set and has such methods and constructors:
+Class MatrixGraph is a class that represents a graph and has such methods and constructors:
 
 ````c++
     // Constrctor
