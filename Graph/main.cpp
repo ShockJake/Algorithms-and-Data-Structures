@@ -5,17 +5,18 @@ using std::endl;
 
 int main(int argc, char const *argv[])
 {
-    MatrixGraph g1(1000);
+    MatrixGraph g1(600);
     g1.read_graph(argv[1]);
-    if (g1.isComplete())
+
+    int start = atoi(argv[2]);
+    std::vector<Vertex> v = g1.BFS(start);
+
+    for (int i = 3; i < argc; i++)
     {
-        cout << "graph is comlete" << endl;
+        int end_point = atoi(argv[i]);
+        cout << g1.get_hop(v, end_point) << " ";
     }
-    else
-    {
-        cout << "graph is not complete" << endl;
-    }
-    g1.to_dot("result.dot");
+    cout << endl;
 
     return 0;
 }

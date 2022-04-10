@@ -3,10 +3,10 @@
 MatrixGraph::MatrixGraph(int numberOfVertices)
 {
     this->numberOfVertices = numberOfVertices;
-    matrix = new int *[numberOfVertices];
+    matrix = new Vertex *[numberOfVertices];
     for (int i = 0; i < numberOfVertices; i++)
     {
-        matrix[i] = new int[numberOfVertices];
+        matrix[i] = new Vertex[numberOfVertices];
     }
     clear();
 }
@@ -26,7 +26,8 @@ void MatrixGraph::clear()
     {
         for (int j = 0; j < numberOfVertices; ++j)
         {
-            matrix[i][j] = 0;
+            matrix[i][j].value = 0;
+            matrix[i][j].color = White;
         }
     }
 }
@@ -41,10 +42,10 @@ void MatrixGraph::createVertices(int number)
 
     numberOfVertices = number;
 
-    matrix = new int *[numberOfVertices];
+    matrix = new Vertex *[numberOfVertices];
     for (int i = 0; i < numberOfVertices; i++)
     {
-        matrix[i] = new int[numberOfVertices];
+        matrix[i] = new Vertex[numberOfVertices];
     }
 }
 
@@ -62,15 +63,17 @@ void MatrixGraph::addEdge(const int &v1, const int &v2, const int &value)
 {
     if (checkVertices(v1, v2))
     {
-        if(!contains(v1))
+        if (!contains(v1))
         {
             realVertices++;
         }
-        if(!contains(v2))
+        if (!contains(v2))
         {
             realVertices++;
         }
-        matrix[v1][v2] = value;
+        matrix[v1][v2].value = value;
+        matrix[v1][v2].position = v1;
+        matrix[v1][v2].endpoint = v2;
     }
     else
     {
@@ -82,7 +85,7 @@ void MatrixGraph::removeEdge(const int &v1, const int &v2)
 {
     if (checkVertices(v1, v2))
     {
-        matrix[v1][v2] = 0;
+        matrix[v1][v2].value = 0;
     }
     throw BadVertixException();
 }
@@ -91,7 +94,7 @@ int MatrixGraph::checkEdge(const int &v1, const int &v2)
 {
     if (checkVertices(v1, v2))
     {
-        return matrix[v1][v2];
+        return matrix[v1][v2].value;
     }
     throw BadVertixException();
 }
@@ -107,7 +110,7 @@ int MatrixGraph::vertexDegree(const int &v)
 
     for (int i = 0; i < numberOfVertices; i++)
     {
-        if (matrix[v][i] != 0)
+        if (matrix[v][i].value != 0)
         {
             degree++;
         }
@@ -125,7 +128,7 @@ std::vector<int> MatrixGraph::getNeighbourIndices(const int &v)
     std::vector<int> neighbours;
     for (int i = 0; i < numberOfVertices; i++)
     {
-        if (matrix[v][i] != 0)
+        if (matrix[v][i].value != 0)
         {
             neighbours.push_back(i);
         }
@@ -152,7 +155,7 @@ int MatrixGraph::getNumberOfEdges()
     {
         for (int j = 0; j < numberOfVertices; ++j)
         {
-            if (matrix[i][j] != 0)
+            if (matrix[i][j].value != 0)
             {
                 number++;
             }
@@ -232,12 +235,12 @@ void MatrixGraph::to_dot(std::string fileName)
         {
             for (int j = 0; j < numberOfVertices; j++)
             {
-                if (matrix[i][j] != 0)
+                if (matrix[i][j].value != 0)
                 {
                     line += std::to_string(i);
                     line += " -> ";
                     line += std::to_string(j);
-                    line += "[label=\"" + std::to_string(matrix[i][j]) + "\"];";
+                    line += "[label=\"" + std::to_string(matrix[i][j].value) + "\"];";
 
                     file << line << std::endl;
                     line = "";
@@ -257,15 +260,15 @@ bool MatrixGraph::contains(const int &v)
 {
     for (int i = 0; i < numberOfVertices; i++)
     {
-        if (matrix[v][i] != 0)
+        if (matrix[v][i].value != 0)
         {
             return true;
         }
     }
 
-    for(int i = 0; i < numberOfVertices; i++)
+    for (int i = 0; i < numberOfVertices; i++)
     {
-        if(matrix[i][v] != 0)
+        if (matrix[i][v].value != 0)
         {
             return true;
         }
@@ -279,4 +282,66 @@ bool MatrixGraph::isComplete()
     int E = (realVertices * (realVertices - 1)) / 2;
 
     return E == edges;
+}
+
+void MatrixGraph::makeWhite()
+{
+    for (int i = 0; i < numberOfVertices; i++)
+    {
+        for (int j = 0; j < numberOfVertices; j++)
+        {
+            if (matrix[i][j].color != White)
+            {
+                matrix[i][j].color = White;
+            }
+        }
+    }
+}
+
+std::vector<Vertex> MatrixGraph::BFS(int start)
+{
+    makeWhite();
+
+    std::vector<Vertex> result;
+    int pos, distance = 0;
+    std::list<int> queue;
+    queue.push_back(start);
+
+    result.push_back(matrix[start][start]);
+
+    while (!queue.empty())
+    {
+        pos = queue.front();
+        queue.pop_back();
+        distance++;
+
+        for (int i = 0; i < numberOfVertices; i++)
+        {
+            if (i == pos)
+            {
+                continue;
+            }
+            if (matrix[pos][i].value > 0 && matrix[pos][i].color == White)
+            {
+                matrix[pos][i].color = Gray;
+                matrix[pos][i].distance = distance;
+                result.push_back(matrix[pos][i]);
+                queue.push_back(i);
+            }
+        }
+        matrix[pos][pos].color = Black;
+    }
+    return result;
+}
+
+int MatrixGraph::get_hop(std::vector<Vertex> queue, int endPoint)
+{
+    for (int i = 0; i < queue.size(); i++)
+    {
+        if (queue.at(i).endpoint == endPoint)
+        {
+            return queue.at(i).distance;
+        }
+    }
+    return -1;
 }

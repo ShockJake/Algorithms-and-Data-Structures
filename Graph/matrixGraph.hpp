@@ -6,15 +6,32 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include <array>
+#include <list>
 
 #define MAX_SIZE 500
+
+enum Color
+{
+    White,
+    Gray,
+    Black
+};
+
+class Vertex
+{
+public:
+    int value = 0;
+    int color = White;
+    int distance = 0;
+    int position = 0;
+    int endpoint = 0;
+};
 
 class MatrixGraph
 {
 private:
     // Neighborhood matrix
-    int **matrix = nullptr;
+    Vertex **matrix = nullptr;
     int numberOfVertices = 0;
     int realVertices = 0;
 
@@ -56,6 +73,11 @@ public:
     bool isComplete();
     // Function to check if given vertice is in graph
     bool contains(const int &v);
+
+    std::vector<Vertex> BFS(int s);
+    void makeWhite();
+
+    int get_hop(std::vector<Vertex> queue, int endPoint);
 
     class BadVertixException : std::exception
     {
