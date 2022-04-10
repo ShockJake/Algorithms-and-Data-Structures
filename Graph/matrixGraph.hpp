@@ -43,6 +43,8 @@ private:
     std::string modifyStr(std::string line);
     // Function to prepeare input for adding a new vertex
     void makeInput(int *v1, int *v2, int *value, std::string line);
+    // Color all vertices to white color
+    void makeWhite();
 
 public:
     MatrixGraph(int vertices = MAX_SIZE);
@@ -74,9 +76,9 @@ public:
     // Function to check if given vertice is in graph
     bool contains(const int &v);
 
+    // Function for Breadth First Search
     std::vector<Vertex> BFS(int s);
-    void makeWhite();
-
+    // Function to get distance between starting point and end point
     int get_hop(std::vector<Vertex> queue, int endPoint);
 
     class BadVertixException : std::exception

@@ -55,6 +55,11 @@ Class MatrixGraph is a class that represents a graph and has such methods and co
     bool isComplete();
     // Function to check if given vertice is in graph
     bool contains(const int &v);
+
+    // Function for Breadth First Searchs
+    std::vector<Vertex> BFS(int s);
+    // Function to get distance between starting point and end point
+    int get_hop(std::vector<Vertex> queue, int endPoint);
 ````
 
 - ### Constructors
@@ -214,3 +219,30 @@ Parameters:
 v - vertex that we are interested in.
 
 ---
+
+```c++
+std::vector<Vertex> BFS(int s);
+```
+
+> Function to perform Breadth First Searchs
+
+Parameters:
+
+s - starting point.
+
+Returns:
+
+Vector that contains all vertices in which can move from starting point.
+
+---
+
+```c++
+int get_hop(std::vector<Vertex> queue, int endPoint);
+```
+
+> Function to get distance between starting point and end point
+
+Parameters:
+
+queue - vector that contains all vertices in which can move from starting point.
+endPoint - point that we want to traverse.
