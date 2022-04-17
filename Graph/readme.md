@@ -60,6 +60,11 @@ Class MatrixGraph is a class that represents a graph and has such methods and co
     std::vector<Vertex> BFS(int s);
     // Function to get distance between starting point and end point
     int get_hop(std::vector<Vertex> queue, int endPoint);
+
+    // Method for Deep First Search
+    std::list<int> DFS();
+    // Method for printing DFS
+    std::string DFS_toString(std::list<int> dfs);
 ````
 
 - ### Constructors
@@ -246,3 +251,25 @@ Parameters:
 
 queue - vector that contains all vertices in which can move from starting point.
 endPoint - point that we want to traverse.
+
+---
+
+```c++
+std::list<int> DFS();
+```
+
+> Function for Deep First Search
+
+---
+
+```c++
+std::string DFS_toString(std::list<int> dfs);
+```
+
+> Function for printing DFS
+
+Parameters:
+
+dfs - list of vertices traversed using DFS.
+
+---
