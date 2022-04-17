@@ -345,3 +345,62 @@ int MatrixGraph::get_hop(std::vector<Vertex> queue, int endPoint)
     }
     return -1;
 }
+
+void MatrixGraph::DFS_visit(int pos1, int pos2, int &time, std::list<int> &data)
+{
+    matrix[pos1][pos2].color = Gray;
+    time++;
+    matrix[pos1][pos2].start_time = time;
+    for (int i = 0; i < numberOfVertices; i++)
+    {
+        if (matrix[pos2][i].color == White && matrix[pos2][i].endpoint != 0)
+        {
+            matrix[pos2][i].color = Gray;
+            DFS_visit(pos2, i, time, data);
+        }
+    }
+    matrix[pos1][pos2].color = Black;
+    time++;
+    matrix[pos1][pos2].end_time = time;
+    data.push_front(matrix[pos1][pos2].endpoint);
+}
+
+std::list<int> MatrixGraph::DFS()
+{
+    makeWhite();
+
+    int time = 0;
+    std::list<int> dfs_list;
+    bool isConnected = false;
+
+    for (int i = 0; i < numberOfVertices; i++)
+    {
+        for (int j = 0; j < numberOfVertices; j++)
+        {
+            if (matrix[i][j].color == White && matrix[i][j].endpoint != 0)
+            {
+                isConnected = true;
+                DFS_visit(i, j, time, dfs_list);
+            }
+        }
+        if (isConnected == true)
+        {
+            dfs_list.push_front(i);
+            isConnected = false;
+        }
+    }
+
+    return dfs_list;
+}
+
+std::string MatrixGraph::DFS_toString(std::list<int> dfs)
+{
+    std::string dfs_str;
+
+    for (int pos : dfs)
+    {
+        dfs_str += std::to_string(pos);
+        dfs_str += " ";
+    }
+    return dfs_str;
+}

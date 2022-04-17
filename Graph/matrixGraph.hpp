@@ -25,6 +25,8 @@ public:
     int distance = 0;
     int position = 0;
     int endpoint = 0;
+    int start_time = 0;
+    int end_time = 0;
 };
 
 class MatrixGraph
@@ -35,51 +37,58 @@ private:
     int numberOfVertices = 0;
     int realVertices = 0;
 
-    // Function to clear verticies
+    // Method to clear verticies
     void clear();
-    // Function to check
+    // Method to check
     bool checkVertices(const int &v1, const int &v2);
-    // Function to modify line
+    // Method to modify line
     std::string modifyStr(std::string line);
-    // Function to prepeare input for adding a new vertex
+    // Method to prepeare input for adding a new vertex
     void makeInput(int *v1, int *v2, int *value, std::string line);
-    // Color all vertices to white color
+    // Method to color all vertices to white color
     void makeWhite();
+    // Method to visit all vertices in DFS.
+    void DFS_visit(int pos1, int pos2, int &time, std::list<int> &data);
 
 public:
     MatrixGraph(int vertices = MAX_SIZE);
     ~MatrixGraph();
 
-    // Function to create connection between two vertices
+    // Method to create connection between two vertices
     void addEdge(const int &v1, const int &v2, const int &value);
-    // Function to remove connection between two vertices
+    // Method to remove connection between two vertices
     void removeEdge(const int &v1, const int &v2);
-    // Function to check if there is a connection between two vertices and get value of weight
+    // Method to check if there is a connection between two vertices and get value of weight
     int checkEdge(const int &v1, const int &v2);
-    // Function to clear graph and set up new settings
+    // Method to clear graph and set up new settings
     void createVertices(int number);
 
-    // Function to get number of neighbours of vertex
+    // Method to get number of neighbours of vertex
     int vertexDegree(const int &v);
-    // Function to get all neihgbour vertices
+    // Method to get all neihgbour vertices
     std::vector<int> getNeighbourIndices(const int &v);
-    // Function to print all neihgbour vertices
+    // Method to print all neihgbour vertices
     void printNeighbourIndices(const int &v);
-    // Function to get number of edges
+    // Method to get number of edges
     int getNumberOfEdges();
-    // Function to add edges from a file
+    // Method to add edges from a file
     void read_graph(std::string path);
-    // Function to export graph to a file
+    // Method to export graph to a file
     void to_dot(std::string fileName);
-    // Function to check wheather graph is a complete
+    // Method to check wheather graph is a complete
     bool isComplete();
-    // Function to check if given vertice is in graph
+    // Method to check if given vertice is in graph
     bool contains(const int &v);
 
-    // Function for Breadth First Search
+    // Method for Breadth First Search
     std::vector<Vertex> BFS(int s);
-    // Function to get distance between starting point and end point
+    // Method to get distance between starting point and end point
     int get_hop(std::vector<Vertex> queue, int endPoint);
+
+    // Method for Deep First Search
+    std::list<int> DFS();
+    // Method for printing DFS
+    std::string DFS_toString(std::list<int> dfs);
 
     class BadVertixException : std::exception
     {
