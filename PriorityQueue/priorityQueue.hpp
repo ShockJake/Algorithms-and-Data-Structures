@@ -1,197 +1,139 @@
-#ifndef PRIORITY_QUEUE_HPP
-#define PRIORITY_QUEUE_HPP
-
+#pragma once
 #include <iostream>
-#include <vector>
-#include <string>
 
-using namespace std;
-
-template <class T, class U>
-class Element : public std::pair<T, U>
+class Element
 {
+private:
+    std::pair<std::string, int> data;
+
+public:
+    Element()
+    {
+    }
+
+    Element(std::string val, int priority)
+    {
+        data.first = val;
+        data.second = priority;
+    }
+
+    std::string getValue() { return data.first; }
+    int getPriority() { return data.second; }
 };
 
-template <class T>
 class PriorityQueue
 {
 private:
-    std::vector<Element<T, int>> *data = nullptr;
-    int _size = 0;
-    void heapify(int i);
+    Element *arr = nullptr;
+    unsigned int maxSize;
+    unsigned int size;
+    unsigned int largest;
+
+    unsigned int left(unsigned int i) { return i * 2; }
+    unsigned int right(unsigned int i) { return i * 2 + 1; }
+    unsigned int parent(unsigned int i) { return i / 2; }
+
+    void swap(unsigned int i, unsigned int j);
+    void buildMaxHeap(unsigned int &heapSize);
+    void maxHeapify(unsigned int &heapSize, unsigned int i);
+    void maxHeapInsert(unsigned int &heapSize, Element el);
+    void heapIncreaseKey(unsigned int i, Element el);
+    void removeFirst();
 
 public:
-    // Cunstructor
-    PriorityQueue();
-    // Destructor
+    PriorityQueue(unsigned int size);
     ~PriorityQueue();
-    // Insertion
-    void insertElement(Element<T, int> e);
-    // Getting value of the biggest priority
-    int getMaxPriority();
-    // Getting and removing element of the highest priority
-    Element<T, int> pop();
-    // Increasing elements priority
-    void increasePriority(Element<T, int> e, int priority);
-    // Get size
-    int getSize();
-    // Print priority queue
-    std::string toString();
-
-    class EmptyQueueException : std::exception
-    {
-        const char *what() const throw()
-        {
-            return "Queue is empty";
-        }
-    };
-
-    class LackOfElementException : std::exception
-    {
-        const char *what() const throw()
-        {
-            return "There is no such element in the queue";
-        }
-    };
-
-private:
-    int left(int i) { return 2 * i; }
-    int right(int i) { return 2 * i + 1; }
+    void InsertElement(Element e);
+    bool isEmpty();
+    Element pop();
 };
 
-template <class T>
-PriorityQueue<T>::PriorityQueue()
+PriorityQueue::PriorityQueue(unsigned int size)
 {
-    data = new std::vector<Element<T, int>>;
+    this->size = 0;
+    maxSize = size;
+    arr = new Element[size];
 }
 
-template <class T>
-PriorityQueue<T>::~PriorityQueue()
+PriorityQueue::~PriorityQueue()
 {
-    delete data;
-}
-
-template <class T>
-int PriorityQueue<T>::getSize()
-{
-    return data->size();
-}
-
-template <class T>
-int PriorityQueue<T>::getMaxPriority()
-{
-    Element<T, int> el = data.at(0);
-    return el.second;
-}
-
-inline std::string to_string(std::string _Val)
-{ // avoiding problem with convertion string to string
-    return _Val;
-}
-
-template <class T>
-std::string PriorityQueue<T>::toString()
-{
-    if (_size == 0)
+    if (arr != nullptr)
     {
-        throw EmptyQueueException();
-    }
-
-    std::string result = "";
-    Element<T, int> e;
-    for (int i = 0; i < data->size() - 1; i++)
-    {
-        e = data->at(i);
-        result += to_string(e.first);
-        result += " ";
-    }
-    e = data->at(data->size() - 1);
-    result += to_string(e.first);
-
-    return result;
-}
-
-template <class T>
-void PriorityQueue<T>::heapify(int i)
-{
-    int l = left(i);
-    int r = right(i);
-    int lg = i;
-
-    if (l < this->_size && r <= this->_size)
-    {
-        if (r == this->_size)
-        {
-            r--;
-        }
-
-        Element<T, int> leftEl = data->at(l);
-        Element<T, int> rightEl = data->at(r);
-        Element<T, int> lgEl = data->at(lg);
-
-        if (leftEl.second > lgEl.second)
-        {
-            lg = l;
-        }
-        else if (rightEl.second > lgEl.second)
-        {
-            lg = r;
-        }
-        if (lg != i)
-        {
-            std::swap(data->at(i), data->at(lg));
-            heapify(lg);
-        }
+        delete[] arr;
     }
 }
 
-template <class T>
-void PriorityQueue<T>::insertElement(Element<T, int> e)
+Element PriorityQueue::pop()
 {
-    _size++;
-    data->push_back(e);
-    for (int i = data->size() - 1; i >= 0; i--)
+    Element element = arr[0];
+    removeFirst();
+    return element;
+}
+
+bool PriorityQueue::isEmpty()
+{
+    return size == 0;
+}
+
+void PriorityQueue::InsertElement(Element element)
+{
+    maxHeapInsert(size, element);
+}
+
+void PriorityQueue::swap(unsigned int i, unsigned int j)
+{
+    Element tmp = arr[j];
+    arr[j] = arr[i];
+    arr[i] = tmp;
+}
+
+void PriorityQueue::buildMaxHeap(unsigned int &heapSize)
+{
+    for (int i = heapSize / 2; i >= 0; i--)
     {
-        heapify(i);
+        maxHeapify(heapSize, i);
     }
 }
 
-template <class T>
-void PriorityQueue<T>::increasePriority(Element<T, int> e, int priority)
+void PriorityQueue::maxHeapify(unsigned int &heapSize, unsigned int i)
 {
-    Element<T, int> innerEl;
-    for (int i = 0; i < data->size(); i++)
+    unsigned int l = left(i);
+    unsigned int r = right(i);
+    if ((l < heapSize) && (arr[l].getPriority() > arr[i].getPriority()))
+        largest = l;
+    else
+        largest = i;
+    if ((r < heapSize) && (arr[r].getPriority() > arr[largest].getPriority()))
+        largest = r;
+    if (largest != i)
     {
-        innerEl = data.at(i);
-        if (innerEl.first == e.first && innerEl.second == e.second)
-        {
-            if (priority < innerEl.second)
-            {
-                std::cout << "New priority is smaller that current\n";
-            }
-
-            innerEl.second = priority;
-            heapify(0);
-            return;
-        }
+        swap(i, largest);
+        maxHeapify(heapSize, largest);
     }
-    throw LackOfElementException();
 }
 
-template <class T>
-Element<T, int> PriorityQueue<T>::pop()
+void PriorityQueue::maxHeapInsert(unsigned int &heapSize, Element el)
 {
-    if (this->_size == 0)
-    {
-        throw EmptyQueueException();
-    }
-
-    Element<T, int> result = data.at(0);
-    data[0] = data->back();
-    data->pop_back();
-    heapify(0);
-    _size--;
-    return result;
+    arr[heapSize] = el;
+    heapIncreaseKey(heapSize, el);
+    heapSize++;
 }
 
-#endif // PRIORITY_QUEUE_HPP
+void PriorityQueue::heapIncreaseKey(unsigned int i, Element el)
+{
+    if (el.getPriority() < arr[i].getPriority())
+        throw std::runtime_error("New key is smaller than current key");
+    arr[i] = el;
+    while ((i > 0) && arr[parent(i)].getPriority() < arr[i].getPriority())
+    {
+        swap(i, parent(i));
+        i = parent(i);
+    }
+}
+
+void PriorityQueue::removeFirst()
+{
+    arr[0] = arr[size - 1];
+    size--;
+    buildMaxHeap(size);
+}

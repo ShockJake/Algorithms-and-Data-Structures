@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <list>
 
@@ -48,7 +49,7 @@ private:
     // Method to color all vertices to white color
     void makeWhite();
     // Method to visit all vertices in DFS.
-    void DFS_visit(int pos1, int pos2, int &time, std::list<int> &data);
+    void DFS_visit(int pos1, int pos2, int &time, std::list<int> &data, bool isFirst, std::list<int> &visited);
 
 public:
     MatrixGraph(int vertices = MAX_SIZE);

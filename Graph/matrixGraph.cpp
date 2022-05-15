@@ -125,22 +125,22 @@ std::vector<int> MatrixGraph::getNeighbourIndices(const int &v)
         throw BadVertixException();
     }
 
-    std::vector<int> neighbours;
+    std::vector<int> neighbors;
     for (int i = 0; i < numberOfVertices; i++)
     {
         if (matrix[v][i].value != 0)
         {
-            neighbours.push_back(i);
+            neighbors.push_back(i);
         }
     }
-    return neighbours;
+    return neighbors;
 }
 
 void MatrixGraph::printNeighbourIndices(const int &v)
 {
-    std::vector<int> neighbours = getNeighbourIndices(v);
+    std::vector<int> neighbors = getNeighbourIndices(v);
 
-    for (auto iterator = neighbours.cbegin(); iterator != neighbours.cend(); ++iterator)
+    for (auto iterator = neighbors.cbegin(); iterator != neighbors.cend(); ++iterator)
     {
         std::cout << *iterator << ' ';
     }
@@ -210,6 +210,11 @@ void MatrixGraph::read_graph(std::string path)
             v2 = 0;
             value = 0;
             std::getline(file, line);
+            if (strlen(line.c_str()) == 0)
+            {
+                continue;
+            }
+
             line = modifyStr(line);
             makeInput(&v1, &v2, &value, line);
 
@@ -336,6 +341,11 @@ std::vector<Vertex> MatrixGraph::BFS(int start)
 
 int MatrixGraph::get_hop(std::vector<Vertex> queue, int endPoint)
 {
+    if (endPoint == queue.at(0).endpoint)
+    {
+        return 0;
+    }
+
     for (int i = 0; i < queue.size(); i++)
     {
         if (queue.at(i).endpoint == endPoint)
@@ -346,23 +356,54 @@ int MatrixGraph::get_hop(std::vector<Vertex> queue, int endPoint)
     return -1;
 }
 
-void MatrixGraph::DFS_visit(int pos1, int pos2, int &time, std::list<int> &data)
+int containsNum(std::list<int> &data, int number)
 {
+    int n = 0;
+    for (int i : data)
+    {
+        if (i == number)
+        {
+            n++;
+        }
+    }
+    return n;
+}
+
+void MatrixGraph::DFS_visit(int pos1, int pos2, int &time, std::list<int> &data, bool isFirst, std::list<int> &visited)
+{
+    bool hasNext = false;
+    visited.push_back(pos2);
     matrix[pos1][pos2].color = Gray;
     time++;
     matrix[pos1][pos2].start_time = time;
     for (int i = 0; i < numberOfVertices; i++)
     {
+        // std::cout << '#'<< pos2 << ',' << i << ' ' << matrix[pos2][i].color << '\n';
         if (matrix[pos2][i].color == White && matrix[pos2][i].endpoint != 0)
         {
+            //std::cout << "\tDetection: " << pos2 << ',' << i << '\n';
             matrix[pos2][i].color = Gray;
-            DFS_visit(pos2, i, time, data);
+            DFS_visit(pos2, i, time, data, false, visited);
+            hasNext = true;
         }
     }
     matrix[pos1][pos2].color = Black;
     time++;
     matrix[pos1][pos2].end_time = time;
-    data.push_front(matrix[pos1][pos2].endpoint);
+    if (containsNum(visited, pos2) > 1 && !hasNext)
+    {
+        return;
+    }
+    if (!hasNext && !containsNum(data, pos2) && containsNum(visited, pos2) == 0)
+    {
+        //std::cout << "Pushing " << pos2 << " from dfs_visit hn\n";
+        data.push_front(pos2);
+    }
+    else if (!containsNum(data, matrix[pos1][pos2].endpoint))
+    {
+        //std::cout << "Pushing " << pos2 << " from dfs_visit con\n";
+        data.push_front(matrix[pos1][pos2].endpoint);
+    }
 }
 
 std::list<int> MatrixGraph::DFS()
@@ -373,18 +414,23 @@ std::list<int> MatrixGraph::DFS()
     std::list<int> dfs_list;
     bool isConnected = false;
 
+    std::list<int> visited;
+
     for (int i = 0; i < numberOfVertices; i++)
     {
         for (int j = 0; j < numberOfVertices; j++)
         {
             if (matrix[i][j].color == White && matrix[i][j].endpoint != 0)
             {
+                visited.push_back(i);
+                //std::cout << "Starting DFS_visit(" << i << ',' << j << ")\n";
+                DFS_visit(i, j, time, dfs_list, true, visited);
                 isConnected = true;
-                DFS_visit(i, j, time, dfs_list);
             }
         }
-        if (isConnected == true)
+        if (isConnected)
         {
+            //std::cout << "Pushing " << i << " from dfs\n";
             dfs_list.push_front(i);
             isConnected = false;
         }

@@ -44,3 +44,7 @@ PriorityQueue/.vscode/settings.json
 PriorityQueue/.vscode/tasks.json
 Graph/graph500.csv
 Graph/graph_dag.csv
+PriorityQueue/sorted-test.txt
+PriorityQueue/test.txt
+PriorityQueue/main2.cpp
+PriorityQueue/main2.exe

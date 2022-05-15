@@ -1,52 +1,48 @@
 #include "priorityQueue.hpp"
+#include <string>
+#include <fstream>
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
-    PriorityQueue<std::string> queue;
+    std::string line;
+    int lineNum = 0;
+    std::fstream file;
 
-    Element<std::string, int> *elements = new Element<std::string, int>[argc - 1];
-    int number_position;
-    for (int i = 1; i < argc; i++)
+    file.open(std::string(argv[1]).c_str(), std::fstream::in);
+    if (!file.is_open())
     {
-        std::string input = to_string(argv[i]);
-        std::string word = "";
-        std::string priority = "";
-
-        for (int i = 0; i < input.size(); i++)
-        {
-            if (input[i] == '(')
-            {
-                continue;
-            }
-            if (input[i] == ',')
-            {
-                number_position = i;
-                break;
-            }
-            word += input[i];
-        }
-
-        for (int i = number_position + 1; i < input.size(); i++)
-        {
-            if (input[i] == ')')
-            {
-                break;
-            }
-
-            priority += input[i];
-        }
-
-        elements[i - 1].first = word;
-        elements[i - 1].second = atoi(priority.c_str());
+        std::cout << "Can't open the file\n";
+        return 1;
     }
 
-    for (int i = 0; i < argc - 1; i++)
+    while (!file.eof())
     {
-        queue.insertElement(elements[i]);
+        std::getline(file, line);
+        lineNum++;
     }
-    std::cout << queue.toString() << std::endl;
+    file.close();
+    PriorityQueue pq(lineNum);
 
-    delete[] elements;
+    file.open(std::string(argv[1]).c_str(), std::fstream::in);
+    while (!file.eof())
+    {
+        std::getline(file, line);
+        Element el(line, (int)line[0]);
+        pq.InsertElement(el);
+    }
+    file.close();
 
+    std::string newFile("sorted-");
+    newFile.assign(argv[1]);
+
+    file.open(newFile, std::fstream::out);
+
+    while (!pq.isEmpty())
+    {
+        Element e = pq.pop();
+        file << e.getValue() << '\n';
+    }
+
+    file.close();
     return 0;
 }
